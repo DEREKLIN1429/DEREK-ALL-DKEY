@@ -114,6 +114,14 @@
         }
         .color-group-2:active { box-shadow: none; }
 
+        /* 第四組顏色 (紫色 - 新增) */
+        .color-group-3 {
+            background: linear-gradient(to bottom, #9C27B0, #7B1FA2);
+            box-shadow: 0 3px 0 #4A148C;
+        }
+        .color-group-3:active { box-shadow: none; }
+
+
         /* ---------------------------------- */
         /* 4. 電腦版調整 */
         /* ---------------------------------- */
@@ -222,6 +230,7 @@
                     <option value="0">第一組 (賴桑專區)</option>
                     <option value="1">第二組 (維修紀錄)</option>
                     <option value="2">第三組 (保養查核)</option>
+                    <option value="3">第四組 (庫存盤點)</option>
                 </select>
                 
                 <input type="text" id="new-en" placeholder="英文名稱 (必填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
@@ -274,14 +283,27 @@
                     { en: "MX Maintenance", cn: "混練保養查核", url: "https://dereklin1429.github.io/M-C-maintenance-MX/", icon: "fa-cogs" },
                     { en: "CT Maintenance", cn: "裁斷保養查核", url: "https://dereklin1429.github.io/Maintenance-CT/", icon: "fa-file-alt" },
                     { en: "EX Maintenance", cn: "押出保養查核", url: "https://dereklin1429.github.io/M-C_Maintenance-EX/", icon: "fa-clipboard-check" },
-                    { en: "CL Maintenance", cn: "上膠保養查核", url: "https://dereklin1429.github.io/MC-Maintenance-CL/", icon: "fa-list-ol" }
+                    { en: "CL Maintenance", cn: "上膠保養查核", url: "https://dereklin1429.github.io/MC-Maintenance-CL/", icon: "fa-list-ol" },
+                    // 新增項目
+                    { en: "Vehicle-Management", cn: "原管貨櫃管理", url: "https://dereklin1429.github.io/Vehicle-Management/", icon: "fa-truck" }
+                ]
+            },
+            {
+                // 新增第四組
+                title: "庫存盤點 (Inventory)",
+                items: [
+                    { en: "Mixing Inventory", cn: "混練盤點", url: "https://chiehs1429.github.io/Mixing/", icon: "fa-cubes" },
+                    { en: "Extrusion Inventory", cn: "押出盤點", url: "https://chiehs1429.github.io/Extrusion_app/", icon: "fa-layer-group" },
+                    { en: "Calendering Inventory", cn: "上膠盤點", url: "https://chiehs1429.github.io/Calendering/", icon: "fa-scroll" },
+                    { en: "CUTTING Inventory", cn: "裁斷盤點", url: "https://chiehs1429.github.io/CUTTING-Inventory/", icon: "fa-cut" },
+                    { en: "RW WH Inventory", cn: "原物料倉庫", url: "https://chiehs1429.github.io/RM-Warehouse/", icon: "fa-warehouse" }
                 ]
             }
         ];
 
         let appData = [];
-        // 使用新的 Key 避免與舊的格式衝突
-        const STORAGE_KEY = 'departmentalAppButtonsV4_Groups';
+        // 使用 V5 Key 強制更新資料
+        const STORAGE_KEY = 'departmentalAppButtonsV5_Groups';
 
         // 1. 初始化
         function loadData() {
@@ -306,17 +328,14 @@
             container.innerHTML = '';
 
             appData.forEach((group, groupIndex) => {
-                // 建立群組容器
                 const groupDiv = document.createElement('div');
                 groupDiv.className = 'group-container';
                 
-                // 標題
                 const title = document.createElement('div');
                 title.className = 'group-title';
                 title.textContent = group.title;
                 groupDiv.appendChild(title);
 
-                // 按鈕網格
                 const grid = document.createElement('div');
                 grid.className = 'button-grid';
 
@@ -327,7 +346,7 @@
                     }
 
                     const link = document.createElement('a');
-                    // 根據組別加上不同的顏色 class: color-group-0, color-group-1, color-group-2
+                    // 這裡會自動套用 color-group-0, 1, 2, 3
                     link.className = `btn-style color-group-${groupIndex}`;
                     link.href = btn.url;
                     link.target = '_blank';
@@ -345,24 +364,21 @@
             });
         }
 
-        // 4. 渲染設定列表 (手機版垂直排列)
+        // 4. 渲染設定列表
         function renderSettingsList() {
             const list = document.getElementById('settings-list');
             list.innerHTML = '';
 
             appData.forEach((group, groupIndex) => {
-                // 分組標題
                 const header = document.createElement('div');
                 header.className = 'setting-group-header';
                 header.textContent = group.title;
                 list.appendChild(header);
 
-                // 項目列表
                 group.items.forEach((item, itemIndex) => {
                     const div = document.createElement('div');
                     div.className = 'setting-item';
                     
-                    // 為了不超出手機畫面，input 改為垂直堆疊
                     div.innerHTML = `
                         <label>英文名稱</label>
                         <input type="text" value="${item.en}" id="input-en-${groupIndex}-${itemIndex}">
@@ -387,7 +403,7 @@
             });
         }
 
-        // 5. 單項儲存功能 (按鈕旁的儲存)
+        // 5. 單項儲存
         function saveSingleItem(gIndex, iIndex) {
             const en = document.getElementById(`input-en-${gIndex}-${iIndex}`).value.trim();
             const cn = document.getElementById(`input-cn-${gIndex}-${iIndex}`).value.trim();
@@ -398,28 +414,27 @@
                 return;
             }
 
-            // 更新資料
             appData[gIndex].items[iIndex].en = en;
             appData[gIndex].items[iIndex].cn = cn;
             appData[gIndex].items[iIndex].url = url;
 
             saveData();
-            renderMain(); // 更新背後主畫面
+            renderMain();
             alert("已儲存變更！");
         }
 
-        // 6. 刪除項目
+        // 6. 刪除
         function deleteItem(gIndex, iIndex) {
             const target = appData[gIndex].items[iIndex];
             if(confirm(`確定要刪除 "${target.en}" 嗎？`)) {
                 appData[gIndex].items.splice(iIndex, 1);
                 saveData();
                 renderMain();
-                renderSettingsList(); // 重新渲染設定列表
+                renderSettingsList();
             }
         }
 
-        // 7. 新增項目
+        // 7. 新增
         function addNewButton() {
             const gIndex = document.getElementById('new-group-select').value;
             const en = document.getElementById('new-en').value.trim();
@@ -440,7 +455,6 @@
             renderMain();
             renderSettingsList();
             
-            // 清空輸入框
             document.getElementById('new-en').value = '';
             document.getElementById('new-cn').value = '';
             document.getElementById('new-url').value = '';
@@ -471,11 +485,8 @@
             if(e.target == modal) closeModal();
         }
 
-        // 啟動
         loadData();
 
     </script>
 </body>
 </html>
-
-
