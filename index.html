@@ -17,7 +17,7 @@
             flex-direction: column;
             align-items: center;
             font-family: Arial, sans-serif;
-            padding: 30px 10px;
+            padding: 20px 5px; /* 手機版邊距縮小 */
             margin: 0;
             min-height: 100vh;
             position: relative; 
@@ -25,7 +25,7 @@
 
         .header-container {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 20px; /* 縮小標題下方距離 */
             width: 100%;
             max-width: 720px;
         }
@@ -33,34 +33,44 @@
         h1 {
             color: #444;
             margin: 0;
-            font-size: 30px; 
+            font-size: 26px; /* 手機標題字體微調 */
         }
         .subheader {
             color: #666;
-            font-size: 18px;
+            font-size: 16px;
             margin-top: 5px;
         }
         
-        /* 桌面版網格設置 (維持 3 個一排) */
+        /* ---------------------------------- */
+        /* 2. 網格容器 (Grid) */
+        /* ---------------------------------- */
         .button-grid {
             display: flex;
             flex-wrap: wrap; 
-            width: 720px; 
-            gap: 60px; 
+            width: 100%;            /* 預設佔滿寬度 */
+            max-width: 720px;       /* 電腦版最大寬度 */
+            gap: 10px;              /* 按鈕間距 */
             justify-content: flex-start; 
             margin-bottom: 40px; 
+            box-sizing: border-box;
+            padding: 0 5px;         /* 容器內距 */
         }
 
         /* ---------------------------------- */
-        /* 2. 主頁按鈕 (連結) 的通用樣式 */
+        /* 3. 按鈕樣式 (Btn Style) */
         /* ---------------------------------- */
 
         .btn-style {
-            width: 200px;
-            height: 200px;
+            /* 【核心修改】手機版預設：一排 3 個
+               計算公式：(100% - (間距 * 2)) / 3 
+               假設 gap 是 10px，兩格間距就是 20px
+            */
+            width: calc((100% - 20px) / 3); 
+            
+            height: 130px; /* 高度適中 */
             text-decoration: none; 
             color: #fff; 
-            border-radius: 20px; 
+            border-radius: 12px; 
             cursor: pointer;
             box-sizing: border-box; 
             position: relative; 
@@ -73,9 +83,11 @@
             text-align: center;
 
             /* 橘色高光樣式 */
-            box-shadow: 0 4px 0 #D46900; 
+            box-shadow: 0 3px 0 #D46900; 
             transition: transform 0.1s, box-shadow 0.1s;
             background: linear-gradient(to bottom, #FF8C00, #FF7F00); 
+            
+            padding: 5px; /* 內距縮小，讓文字有更多空間 */
         }
 
         .btn-style:hover {
@@ -95,11 +107,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 20px;
-            /* 光澤效果 */
+            border-radius: 12px;
             background: linear-gradient(
                 to bottom,
-                rgba(255, 255, 255, 0.5) 0%,
+                rgba(255, 255, 255, 0.4) 0%,
                 rgba(255, 255, 255, 0.0) 50%,
                 rgba(255, 255, 255, 0.1) 100%
             );
@@ -107,26 +118,57 @@
         }
 
         /* ---------------------------------- */
-        /* 3. 按鈕內容樣式 (網址按鈕) */
+        /* 4. 按鈕內容 (Icon & Text) */
         /* ---------------------------------- */
         
         .btn-icon {
-            font-size: 80px; 
-            margin-bottom: 5px;
+            font-size: 36px;  /* 【修改】圖示縮小，讓位給文字 */
+            margin-bottom: 8px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
         }
         
         .btn-text {
-            font-size: 16px;
-            font-weight: bold;
-            line-height: 1.2;
-            padding: 0 10px;
+            font-size: 15px;      /* 【修改】字體加大 */
+            font-weight: 800;     /* 加粗 */
+            line-height: 1.2;     /* 行高緊湊 */
+            padding: 0 2px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); 
             word-break: break-word; 
+            
+            /* 限制最多顯示 3 行，避免溢出 */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
         
         /* ---------------------------------- */
-        /* 4. 設定按鈕樣式 (右下角齒輪圖標) */
+        /* 5. 電腦版調整 (MEDIA QUERY - Desktop) */
+        /* ---------------------------------- */
+        /* 當螢幕大於 768px 時，回復大按鈕樣式 */
+        @media (min-width: 769px) {
+            .button-grid {
+                width: 720px;
+                gap: 60px;
+                padding: 0;
+            }
+            .btn-style {
+                width: 200px;
+                height: 200px;
+                border-radius: 20px;
+            }
+            .btn-icon {
+                font-size: 80px;
+                margin-bottom: 10px;
+            }
+            .btn-text {
+                font-size: 18px;
+                padding: 0 10px;
+            }
+        }
+
+        /* ---------------------------------- */
+        /* 6. 設定按鈕樣式 */
         /* ---------------------------------- */
         #settings-btn {
             position: fixed;
@@ -141,7 +183,6 @@
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             z-index: 100;
-
             display: flex;
             align-items: center;
             justify-content: center;
@@ -152,35 +193,7 @@
         }
         
         /* ---------------------------------- */
-        /* 5. 手機模式優化 (MEDIA QUERY - 主頁) */
-        /* ---------------------------------- */
-        @media (max-width: 768px) {
-            
-            .button-grid {
-                width: 100%; 
-                max-width: 480px; 
-                gap: 20px; 
-                padding: 0 10px;
-                justify-content: center; 
-            }
-
-            .btn-style {
-                width: calc(50% - 10px); 
-                height: 140px; 
-                border-radius: 15px; 
-            }
-
-            .btn-icon {
-                font-size: 50px; 
-            }
-
-            .btn-text {
-                font-size: 14px;
-            }
-        }
-        
-        /* ---------------------------------- */
-        /* 6. Modal / 設定列表 / 表單 樣式 */
+        /* 7. Modal / 設定列表 / 表單 樣式 */
         /* ---------------------------------- */
         .modal {
             display: none; 
@@ -197,7 +210,7 @@
         .modal-content {
             background-color: #fefefe;
             margin: 5% auto; 
-            padding: 30px;
+            padding: 20px;
             border: 1px solid #888;
             width: 90%; 
             max-width: 600px;
@@ -271,9 +284,7 @@
             border: 1px solid #ccc;
         }
 
-        /* ---------------------------------- */
-        /* 7. 設定列表樣式 */
-        /* ---------------------------------- */
+        /* 設定列表項目 */
         .setting-item {
             display: flex;
             align-items: center;
@@ -294,25 +305,9 @@
             border-radius: 4px;
             min-width: 100px; 
         }
-
-        .setting-item input:nth-child(1), .setting-item input:nth-child(2) {
-            max-width: 150px;
-        }
-
-        .setting-item .delete-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        /* ---------------------------------- */
-        /* 8. 手機模式優化 (MEDIA QUERY - 設定頁面) */
-        /* ---------------------------------- */
+        
+        /* 手機版設定頁面優化 */
         @media (max-width: 768px) {
-            
             .modal-content {
                 margin: 0;
                 width: 100%;
@@ -321,33 +316,23 @@
                 border-radius: 0;
                 border: none;
             }
-            
             .setting-item input[type="text"] {
-                flex-grow: 1;
+                width: 100%;
                 margin-right: 0;
-                margin-bottom: 5px;
-                max-width: none;
             }
-            
-            .setting-item input:nth-child(1), .setting-item input:nth-child(2) {
-                max-width: none; 
-            }
-
             .setting-item .delete-btn {
-                width: 80%; 
-                margin: 5px auto 0 auto; 
-                display: block; 
+                width: 100%;
+                margin-top: 5px;
             }
-
-            .new-btn-form button[type="submit"] {
-                width: 80%; 
-                margin: 0 auto; 
-            }
-            
-            #save-and-return-btn, #reset-btn {
-                width: 90%;
-                margin: 0 auto;
-            }
+        }
+        
+        .setting-item .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -409,7 +394,7 @@
 
     <script>
         // --------------------------------------------------------
-        // 預設按鈕清單 (共8個) - 維持不變
+        // 預設按鈕清單
         // --------------------------------------------------------
         const defaultButtons = [
             { en: "LAI", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-home" },
@@ -423,8 +408,6 @@
         ];
 
         let appButtons = [];
-        
-        // 維持 V3，確保讀取正確的按鈕
         const STORAGE_KEY = 'departmentalAppButtonsV3';
 
         const buttonGrid = document.getElementById('button-grid');
@@ -548,7 +531,7 @@
             }
         }
 
-        // 9. Modal 相關 (已移除密碼邏輯)
+        // 9. Modal 相關
         function openModal() {
             renderSettingsList(); 
             settingsModal.style.display = "block";
@@ -562,7 +545,6 @@
             settingsModal.style.display = "none";
         }
         
-        // 修改：單純儲存並關閉，無須密碼確認
         function saveAndClose() {
             saveButtons(); 
             closeModal();
