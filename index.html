@@ -114,7 +114,7 @@
         }
         .color-group-2:active { box-shadow: none; }
 
-        /* 第四組顏色 (紫色 - 新增) */
+        /* 第四組顏色 (紫色) */
         .color-group-3 {
             background: linear-gradient(to bottom, #9C27B0, #7B1FA2);
             box-shadow: 0 3px 0 #4A148C;
@@ -156,11 +156,21 @@
             min-height: 100vh; padding: 20px; box-sizing: border-box;
         }
 
-        /* 設定列表項目 (手機版優化) */
+        /* 設定列表項目 */
         .setting-group-header {
-            background-color: #eee; padding: 8px;
-            font-weight: bold; margin-top: 15px; border-radius: 4px;
+            padding: 10px;
+            font-weight: bold; 
+            margin-top: 20px; 
+            border-radius: 4px;
+            color: white; /* 文字白色 */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
+
+        /* 設定標題顏色 - 對應主畫面 */
+        .header-style-0 { background-color: #FF8C00; } /* 賴桑 - 橘 */
+        .header-style-1 { background-color: #2196F3; } /* 維修 - 藍 */
+        .header-style-2 { background-color: #4CAF50; } /* 保養 - 綠 */
+        .header-style-3 { background-color: #9C27B0; } /* 庫存 - 紫 */
 
         .setting-item {
             border: 1px solid #ddd; padding: 10px;
@@ -264,7 +274,7 @@
         // --------------------------------------------------------
         const defaultData = [
             {
-                title: "賴桑專區 (LAI)",
+                title: "賴桑專區 (LAI Zone)",
                 items: [
                     { en: "LAI Notes", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-home" },
                     { en: "LAI Repair History", cn: "賴維修紀錄", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-wrench" },
@@ -284,12 +294,10 @@
                     { en: "CT Maintenance", cn: "裁斷保養查核", url: "https://dereklin1429.github.io/Maintenance-CT/", icon: "fa-file-alt" },
                     { en: "EX Maintenance", cn: "押出保養查核", url: "https://dereklin1429.github.io/M-C_Maintenance-EX/", icon: "fa-clipboard-check" },
                     { en: "CL Maintenance", cn: "上膠保養查核", url: "https://dereklin1429.github.io/MC-Maintenance-CL/", icon: "fa-list-ol" },
-                    // 新增項目
-                    { en: "Vehicle-Management", cn: "原管貨櫃管理", url: "https://dereklin1429.github.io/Vehicle-Management/", icon: "fa-truck" }
+                    { en: "Vehicle-Management", cn: "原管貨櫃管理", url: "https://chiehs1429.github.io/", icon: "fa-truck" }
                 ]
             },
             {
-                // 新增第四組
                 title: "庫存盤點 (Inventory)",
                 items: [
                     { en: "Mixing Inventory", cn: "混練盤點", url: "https://chiehs1429.github.io/Mixing/", icon: "fa-cubes" },
@@ -302,10 +310,9 @@
         ];
 
         let appData = [];
-        // 使用 V5 Key 強制更新資料
+        // V5 Key
         const STORAGE_KEY = 'departmentalAppButtonsV5_Groups';
 
-        // 1. 初始化
         function loadData() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
@@ -317,12 +324,10 @@
             renderMain();
         }
 
-        // 2. 儲存
         function saveData() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
         }
 
-        // 3. 渲染主畫面
         function renderMain() {
             const container = document.getElementById('main-container');
             container.innerHTML = '';
@@ -346,7 +351,6 @@
                     }
 
                     const link = document.createElement('a');
-                    // 這裡會自動套用 color-group-0, 1, 2, 3
                     link.className = `btn-style color-group-${groupIndex}`;
                     link.href = btn.url;
                     link.target = '_blank';
@@ -364,14 +368,15 @@
             });
         }
 
-        // 4. 渲染設定列表
+        // 渲染設定列表 (加入標題顏色)
         function renderSettingsList() {
             const list = document.getElementById('settings-list');
             list.innerHTML = '';
 
             appData.forEach((group, groupIndex) => {
                 const header = document.createElement('div');
-                header.className = 'setting-group-header';
+                // 【核心修改】加入對應的 header-style-X 類別
+                header.className = `setting-group-header header-style-${groupIndex}`;
                 header.textContent = group.title;
                 list.appendChild(header);
 
@@ -403,7 +408,6 @@
             });
         }
 
-        // 5. 單項儲存
         function saveSingleItem(gIndex, iIndex) {
             const en = document.getElementById(`input-en-${gIndex}-${iIndex}`).value.trim();
             const cn = document.getElementById(`input-cn-${gIndex}-${iIndex}`).value.trim();
@@ -423,7 +427,6 @@
             alert("已儲存變更！");
         }
 
-        // 6. 刪除
         function deleteItem(gIndex, iIndex) {
             const target = appData[gIndex].items[iIndex];
             if(confirm(`確定要刪除 "${target.en}" 嗎？`)) {
@@ -434,7 +437,6 @@
             }
         }
 
-        // 7. 新增
         function addNewButton() {
             const gIndex = document.getElementById('new-group-select').value;
             const en = document.getElementById('new-en').value.trim();
@@ -461,7 +463,6 @@
             alert("新增成功！");
         }
 
-        // 8. 重置
         function resetToDefault() {
             if (confirm("⚠️ 警告：這將刪除所有修改，恢復為預設值。確定嗎？")) {
                 appData = JSON.parse(JSON.stringify(defaultData));
@@ -472,7 +473,6 @@
             }
         }
 
-        // Modal 控制
         const modal = document.getElementById('settingsModal');
         function openModal() {
             renderSettingsList();
