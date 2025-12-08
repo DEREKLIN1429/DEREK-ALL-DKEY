@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>混練應用程式網站 (MX Application Index)</title>
+    <title>部門應用程式網站 (Departmental Application Index)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
@@ -41,13 +41,13 @@
             margin-top: 5px;
         }
         
-        /* 桌面版網格設置 */
+        /* 桌面版網格設置 (維持 3 個一排) */
         .button-grid {
             display: flex;
             flex-wrap: wrap; 
             width: 720px; 
             gap: 60px; 
-            justify-content: center;
+            justify-content: flex-start; 
             margin-bottom: 40px; 
         }
 
@@ -122,6 +122,7 @@
             line-height: 1.2;
             padding: 0 10px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); 
+            word-break: break-word; 
         }
         
         /* ---------------------------------- */
@@ -160,6 +161,7 @@
                 max-width: 480px; 
                 gap: 20px; 
                 padding: 0 10px;
+                justify-content: center; 
             }
 
             .btn-style {
@@ -201,12 +203,10 @@
             max-width: 600px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            /* 讓內容太多時可以捲動 */
             max-height: 90vh;
             overflow-y: auto;
         }
         
-        /* 新增按鈕表單佈局優化 */
         .new-btn-form {
             display: grid;
             grid-template-columns: 1fr 1fr; 
@@ -214,7 +214,6 @@
             align-items: end;
         }
         
-        /* 底部按鈕區域 */
         .modal-footer {
             margin-top: 20px;
             display: flex;
@@ -222,7 +221,6 @@
             gap: 10px;
         }
 
-        /* 儲存返回按鈕 */
         #save-and-return-btn {
             width: 100%;
             padding: 12px 10px;
@@ -234,7 +232,6 @@
             font-weight: bold;
         }
         
-        /* 重置按鈕 */
         #reset-btn {
             width: 100%;
             padding: 10px;
@@ -249,7 +246,6 @@
             background-color: #5a6268;
         }
         
-        /* 新增按鈕 (submit) - 桌面版佔滿兩欄 */
         .new-btn-form button[type="submit"] {
             grid-column: 1 / 3; 
             padding: 12px 10px;
@@ -358,14 +354,14 @@
 <body>
 
     <div class="header-container">
-        <h1>🏢 混練應用程式索引</h1>
-        <div class="subheader">MIXING Application Index</div>
+        <h1>🏢 部門應用程式索引</h1>
+        <div class="subheader">Departmental Application Index</div>
     </div>
 
     <div class="button-grid" id="button-grid">
     </div>
     
-    <button id="settings-btn" onclick="authenticateAndOpenModal()">
+    <button id="settings-btn" onclick="openModal()">
         <i class="fas fa-cog"></i>
     </button>
     
@@ -399,8 +395,8 @@
             <p style="margin-top: 15px; color: #666; font-size: 12px;">提示：直接在列表中修改名稱或網址會自動儲存。</p>
             
             <div class="modal-footer">
-                <button id="save-and-return-btn" onclick="savePasswordAndClose()">
-                    <i class="fas fa-save"></i> 儲存並返回 (自動記錄密碼)
+                <button id="save-and-return-btn" onclick="saveAndClose()">
+                    <i class="fas fa-save"></i> 儲存並返回
                 </button>
                 <button id="reset-btn" onclick="resetToDefault()">
                     <i class="fas fa-undo"></i> 重置所有設定為預設值
@@ -412,22 +408,24 @@
 
 
     <script>
-        // 預設密碼 (如果 Local Storage 沒有儲存密碼，則使用此預設值)
-        const DEFAULT_PASSWORD = "1429"; 
-        
-        // 預設按鈕資料：包含英文名稱 (en) 和中文名稱 (cn)
+        // --------------------------------------------------------
+        // 預設按鈕清單 (共8個) - 維持不變
+        // --------------------------------------------------------
         const defaultButtons = [
-            { en: "Machine-NG MX", cn: "機械故障資訊", url: "https://dereklin1429.github.io/Machine-NG-MX/", icon: "fa-arrow-right" },
-            { en: "5S Audit MX", cn: "混練 5S 查核", url: "https://dereklin1429.github.io/5S-audit_MX/", icon: "fa-arrow-circle-right" },
-            { en: "Repair Record MX", cn: "機械維修紀錄", url: "https://dereklin1429.github.io/Repair-History-MX/", icon: "fa-play" },
-            { en: "M/C_maintenance MX", cn: "設備保養查核", url: "https://dereklin1429.github.io/M-C-maintenance-MX/", icon: "fa-angle-double-right" },
-            { en: "Mixing", cn: "混練工程", url: "https://chiehs1429.github.io/Mixing/", icon: "fa-caret-right" }
+            { en: "LAI", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-home" },
+            { en: "Repair History", cn: "機台維修紀錄", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-wrench" },
+            { en: "MC Maintenance Check", cn: "設備保養查核", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-check-square" },
+            { en: "Repair History MX", cn: "混練機台維修紀錄", url: "https://dereklin1429.github.io/Repair-History-MX/", icon: "fa-tools" },
+            { en: "MC Maintenance MX", cn: "混練設備保養查核", url: "https://dereklin1429.github.io/M-C-maintenance-MX/", icon: "fa-cogs" },
+            { en: "Maintenance CT", cn: "裁斷設備保養查核", url: "https://dereklin1429.github.io/Maintenance-CT/", icon: "fa-file-alt" },
+            { en: "MC Maintenance EX", cn: "押出設備保養查核", url: "https://dereklin1429.github.io/M-C_Maintenance-EX/", icon: "fa-clipboard-check" },
+            { en: "MC Maintenance CL", cn: "上膠設備保養查核", url: "https://dereklin1429.github.io/MC-Maintenance-CL/", icon: "fa-list-ol" }
         ];
 
         let appButtons = [];
-        // Local Storage Keys
-        const STORAGE_KEY = 'departmentalAppButtonsV2';
-        const STORED_PASSWORD_KEY = 'settingsStoredPassword'; // 用於儲存自動登入密碼
+        
+        // 維持 V3，確保讀取正確的按鈕
+        const STORAGE_KEY = 'departmentalAppButtonsV3';
 
         const buttonGrid = document.getElementById('button-grid');
         const newBtnForm = document.getElementById('new-btn-form');
@@ -439,7 +437,7 @@
             if (saved) {
                 appButtons = JSON.parse(saved);
             } else {
-                appButtons = JSON.parse(JSON.stringify(defaultButtons)); // 使用深拷貝以避免參考問題
+                appButtons = JSON.parse(JSON.stringify(defaultButtons)); 
                 saveButtons();
             }
             renderMainButtons();
@@ -471,7 +469,7 @@
             });
         }
         
-        // 4. 渲染設定列表中的項目
+        // 4. 渲染設定列表
         function renderSettingsList() {
             const settingsList = document.getElementById('settings-list');
             settingsList.innerHTML = '';
@@ -511,7 +509,6 @@
             renderMainButtons();
             renderSettingsList();
             
-            // 清空表單
             newBtnForm.reset();
         });
 
@@ -526,7 +523,7 @@
             }
         }
         
-        // 7. 更新按鈕名稱或網址
+        // 7. 更新按鈕
         function updateButton(index, field, value) {
             value = value.trim();
             if (field === 'en') {
@@ -540,10 +537,9 @@
             renderMainButtons();
         }
         
-        // 8. 恢復預設值功能 (新增)
+        // 8. 重置功能
         function resetToDefault() {
             if (confirm("⚠️ 警告：這將刪除所有自訂的按鈕，並恢復為系統預設值。\n\n確定要繼續嗎？")) {
-                // 深拷貝預設值，防止後續修改影響到原始 defaultButtons 變數
                 appButtons = JSON.parse(JSON.stringify(defaultButtons));
                 saveButtons();
                 renderMainButtons();
@@ -552,11 +548,10 @@
             }
         }
 
-        // 9. Modal 彈窗控制
+        // 9. Modal 相關 (已移除密碼邏輯)
         function openModal() {
             renderSettingsList(); 
             settingsModal.style.display = "block";
-            // 確保手機模式下， Modal 內容滾動條在頂部
             if (window.innerWidth <= 768) {
                 const content = settingsModal.querySelector('.modal-content');
                 if(content) content.scrollTop = 0;
@@ -567,37 +562,10 @@
             settingsModal.style.display = "none";
         }
         
-        function savePasswordAndClose() {
+        // 修改：單純儲存並關閉，無須密碼確認
+        function saveAndClose() {
             saveButtons(); 
-            
-            // 檢查是否已經記住密碼
-            const isRemembered = localStorage.getItem(STORED_PASSWORD_KEY);
-
-            if (!isRemembered) {
-                if (confirm("是否要將本次使用的密碼儲存於此瀏覽器？\n儲存後下次將自動進入設定頁面。")) {
-                    localStorage.setItem(STORED_PASSWORD_KEY, DEFAULT_PASSWORD); 
-                    alert("密碼已儲存。下次訪問將自動登入。");
-                }
-            }
-            
             closeModal();
-        }
-
-        function authenticateAndOpenModal() {
-            const storedPassword = localStorage.getItem(STORED_PASSWORD_KEY);
-            
-            if (storedPassword === DEFAULT_PASSWORD) {
-                openModal();
-                return;
-            }
-
-            const password = prompt("請輸入管理密碼進入設定頁面：");
-            
-            if (password === DEFAULT_PASSWORD) {
-                openModal();
-            } else if (password !== null) {
-                alert("密碼錯誤，無法進入設定頁面。");
-            }
         }
 
         window.onclick = function(event) {
