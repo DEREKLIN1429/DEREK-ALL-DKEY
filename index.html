@@ -8,9 +8,8 @@
     
     <style>
         /* ---------------------------------- */
-        /* 1. 基本設定與佈局 */
+        /* 1. 基本設定 */
         /* ---------------------------------- */
-
         body {
             background-color: #A9A9A9; 
             display: flex;
@@ -20,326 +19,183 @@
             padding: 20px 5px;
             margin: 0;
             min-height: 100vh;
-            position: relative; 
         }
 
         .header-container {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             width: 100%;
             max-width: 720px;
         }
 
-        h1 {
-            color: #444;
-            margin: 0;
-            font-size: 26px;
-        }
-        .subheader {
-            color: #666;
-            font-size: 16px;
-            margin-top: 5px;
-        }
-        
+        h1 { color: #444; margin: 0; font-size: 24px; }
+        .subheader { color: #666; font-size: 14px; margin-top: 5px; }
+
         /* ---------------------------------- */
-        /* 2. 網格容器 (Grid) */
+        /* 2. 分組容器與標題 */
         /* ---------------------------------- */
+        .group-container {
+            width: 100%;
+            max-width: 720px;
+            margin-bottom: 20px;
+        }
+
+        .group-title {
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px 5px 10px 5px;
+            padding-left: 10px;
+            border-left: 5px solid #555;
+        }
+
         .button-grid {
             display: flex;
             flex-wrap: wrap; 
-            width: 100%;
-            max-width: 720px;
             gap: 10px;
             justify-content: flex-start; 
-            margin-bottom: 40px; 
-            box-sizing: border-box;
             padding: 0 5px;
         }
 
         /* ---------------------------------- */
-        /* 3. 按鈕樣式 (Btn Style) */
+        /* 3. 按鈕樣式 (依顏色分組) */
         /* ---------------------------------- */
-
         .btn-style {
             /* 手機版：一排 3 個 */
             width: calc((100% - 20px) / 3); 
-            
-            height: 130px; 
+            height: 120px; 
             text-decoration: none; 
             color: #fff; 
             border-radius: 12px; 
             cursor: pointer;
-            box-sizing: border-box; 
             position: relative; 
-            overflow: hidden; 
-            
             display: flex;
             flex-direction: column;
-            justify-content: center; /* 垂直置中 */
+            justify-content: center;
             align-items: center;
             text-align: center;
-
-            box-shadow: 0 3px 0 #D46900; 
-            transition: transform 0.1s, box-shadow 0.1s;
-            background: linear-gradient(to bottom, #FF8C00, #FF7F00); 
-            
-            /* 【微調 1】減少內距，盡量利用空間 */
-            padding: 4px; 
+            padding: 4px;
+            box-sizing: border-box;
+            transition: transform 0.1s;
         }
 
-        .btn-style:hover {
-            transform: translateY(2px); 
-            box-shadow: 0 2px 0 #D46900;
-        }
+        .btn-style:active { transform: translateY(3px); }
 
-        .btn-style:active {
-            transform: translateY(4px);
-            box-shadow: 0 0 0 #D46900;
-        }
-
-        .btn-style::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-            background: linear-gradient(
-                to bottom,
-                rgba(255, 255, 255, 0.4) 0%,
-                rgba(255, 255, 255, 0.0) 50%,
-                rgba(255, 255, 255, 0.1) 100%
-            );
-            pointer-events: none;
-        }
-
-        /* ---------------------------------- */
-        /* 4. 按鈕內容 (Icon & Text) */
-        /* ---------------------------------- */
-        
-        .btn-icon {
-            /* 【微調 2】縮小 Icon 大小 (原本 36px -> 改為 30px) */
-            font-size: 30px;  
-            /* 【微調 3】縮小 Icon 下方間距 (原本 8px -> 改為 4px) */
-            margin-bottom: 4px; 
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
-            flex-shrink: 0; /* 防止 Icon 被壓縮 */
-        }
-        
-        .btn-text {
-            /* 【微調 4】稍微縮小字體 (原本 15px -> 改為 13.5px) */
-            font-size: 13.5px;
-            font-weight: 800;
-            /* 【微調 5】縮小行高 (原本 1.2 -> 改為 1.15) */
-            line-height: 1.15;     
-            padding: 0 2px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); 
-            word-break: break-word; 
-            
-            /* 限制顯示行數，超過顯示 ... */
+        .btn-icon { font-size: 28px; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        .btn-text { 
+            font-size: 13px; 
+            font-weight: 800; 
+            line-height: 1.2; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4); 
             display: -webkit-box;
-            -webkit-line-clamp: 4; /* 因為字體變小，可以允許顯示到 4 行 */
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-        
+
+        /* 第一組顏色 (橘色) */
+        .color-group-0 {
+            background: linear-gradient(to bottom, #FF8C00, #FF7F00);
+            box-shadow: 0 3px 0 #D46900;
+        }
+        .color-group-0:active { box-shadow: none; }
+
+        /* 第二組顏色 (藍色) */
+        .color-group-1 {
+            background: linear-gradient(to bottom, #2196F3, #1976D2);
+            box-shadow: 0 3px 0 #0D47A1;
+        }
+        .color-group-1:active { box-shadow: none; }
+
+        /* 第三組顏色 (綠色) */
+        .color-group-2 {
+            background: linear-gradient(to bottom, #4CAF50, #388E3C);
+            box-shadow: 0 3px 0 #1B5E20;
+        }
+        .color-group-2:active { box-shadow: none; }
+
         /* ---------------------------------- */
-        /* 5. 電腦版調整 (MEDIA QUERY - Desktop) */
+        /* 4. 電腦版調整 */
         /* ---------------------------------- */
-        /* 注意：這裡的設定會覆蓋上面的手機版設定
-           所以電腦版依然會維持大顆、大字體，不受上述微調影響
-        */
         @media (min-width: 769px) {
-            .button-grid {
-                width: 720px;
-                gap: 60px;
-                padding: 0;
-            }
             .btn-style {
-                width: 200px;
-                height: 200px;
-                border-radius: 20px;
-                padding: 10px; /* 電腦版恢復較大內距 */
+                width: 200px; height: 180px;
+                margin-right: 15px; margin-bottom: 15px;
             }
-            .btn-icon {
-                font-size: 80px;
-                margin-bottom: 10px;
-            }
-            .btn-text {
-                font-size: 18px;
-                line-height: 1.3;
-                padding: 0 10px;
-                -webkit-line-clamp: 3;
-            }
+            .btn-icon { font-size: 60px; margin-bottom: 15px; }
+            .btn-text { font-size: 18px; }
         }
 
         /* ---------------------------------- */
-        /* 6. 設定按鈕樣式 */
+        /* 5. 設定按鈕與 Modal */
         /* ---------------------------------- */
         #settings-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px; 
-            height: 50px;
-            border-radius: 50%; 
-            background-color: #555;
-            color: white;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: fixed; bottom: 20px; right: 20px;
+            width: 50px; height: 50px; border-radius: 50%;
+            background-color: #555; color: white; border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 100;
+            font-size: 24px; cursor: pointer;
         }
 
-        #settings-btn i {
-            font-size: 24px; 
-        }
-        
-        /* ---------------------------------- */
-        /* 7. Modal / 設定列表 / 表單 樣式 */
-        /* ---------------------------------- */
         .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 101; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow-y: auto; 
-            background-color: rgba(0,0,0,0.6); 
+            display: none; position: fixed; z-index: 101;
+            left: 0; top: 0; width: 100%; height: 100%;
+            overflow-y: auto; background-color: rgba(0,0,0,0.6);
         }
 
         .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto; 
-            padding: 20px;
-            border: 1px solid #888;
-            width: 90%; 
-            max-width: 600px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .new-btn-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr; 
-            gap: 10px;
-            align-items: end;
-        }
-        
-        .modal-footer {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            background-color: #fefefe; margin: 0; width: 100%;
+            min-height: 100vh; padding: 20px; box-sizing: border-box;
         }
 
-        #save-and-return-btn {
-            width: 100%;
-            padding: 12px 10px;
-            background-color: #007bff; 
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        
-        #reset-btn {
-            width: 100%;
-            padding: 10px;
-            background-color: #6c757d;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
+        /* 設定列表項目 (手機版優化) */
+        .setting-group-header {
+            background-color: #eee; padding: 8px;
+            font-weight: bold; margin-top: 15px; border-radius: 4px;
         }
 
-        #reset-btn:hover {
-            background-color: #5a6268;
-        }
-        
-        .new-btn-form button[type="submit"] {
-            grid-column: 1 / 3; 
-            padding: 12px 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-right: 0 !important;
-        }
-
-        .new-btn-form label {
-            font-size: 14px;
-            color: #555;
-            display: block;
-            margin-bottom: 3px;
-        }
-
-        .new-btn-form input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-
-        /* 設定列表項目 */
         .setting-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            flex-wrap: wrap; 
+            border: 1px solid #ddd; padding: 10px;
+            margin-bottom: 10px; border-radius: 5px;
+            background-color: #fff;
+            display: flex; flex-direction: column; gap: 8px;
         }
+
+        .setting-item label { font-size: 12px; color: #666; margin-bottom: -5px; }
         
         .setting-item input[type="text"] {
-            flex-grow: 1;
-            padding: 8px;
-            margin-right: 10px;
-            margin-bottom: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            min-width: 100px; 
+            padding: 8px; border: 1px solid #ccc; border-radius: 4px;
+            width: 100%; box-sizing: border-box;
         }
-        
-        @media (max-width: 768px) {
-            .modal-content {
-                margin: 0;
-                width: 100%;
-                min-height: 100vh;
-                height: 100%;
-                border-radius: 0;
-                border: none;
-            }
-            .setting-item input[type="text"] {
-                width: 100%;
-                margin-right: 0;
-            }
-            .setting-item .delete-btn {
-                width: 100%;
-                margin-top: 5px;
-            }
+
+        /* 按鈕並排容器 */
+        .item-actions {
+            display: flex; gap: 10px; margin-top: 5px;
         }
-        
-        .setting-item .delete-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
+
+        .action-btn {
+            flex: 1; /* 平分寬度 */
+            padding: 10px; border: none; border-radius: 4px;
+            color: white; cursor: pointer; font-size: 14px;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
         }
+
+        .save-btn { background-color: #2196F3; } /* 藍色 */
+        .delete-btn { background-color: #f44336; } /* 紅色 */
+
+        /* 底部功能區 */
+        .modal-footer { margin-top: 30px; display: flex; flex-direction: column; gap: 10px; padding-bottom: 30px;}
+        #close-modal-btn { background-color: #666; color: white; padding: 12px; border: none; border-radius: 4px; width: 100%; font-size: 16px;}
+        #reset-btn { background-color: #999; color: white; padding: 12px; border: none; border-radius: 4px; width: 100%; }
+
+        /* 新增按鈕表單 */
+        .add-form {
+            background: #f9f9f9; padding: 15px; border: 1px solid #ddd;
+            border-radius: 8px; margin-bottom: 20px;
+        }
+        .add-form select { width: 100%; padding: 8px; margin-bottom: 10px; }
+        .add-btn { width: 100%; background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; font-size: 16px;}
+
     </style>
 </head>
 <body>
@@ -349,224 +205,275 @@
         <div class="subheader">Departmental Application Index</div>
     </div>
 
-    <div class="button-grid" id="button-grid">
-    </div>
+    <div id="main-container"></div>
     
     <button id="settings-btn" onclick="openModal()">
         <i class="fas fa-cog"></i>
     </button>
     
-
     <div id="settingsModal" class="modal">
         <div class="modal-content">
-            <h2>新增專案網址</h2> 
-
-            <form id="new-btn-form" class="new-btn-form">
-                <div>
-                    <label for="new-en-name">英文名稱</label>
-                    <input type="text" id="new-en-name" placeholder="Machine-NG" required>
-                </div>
-                <div>
-                    <label for="new-cn-name">中文名稱</label>
-                    <input type="text" id="new-cn-name" placeholder="機械管理 (選填)">
-                </div>
-                <div style="grid-column: 1 / 3;">
-                    <label for="new-url">網址連結</label>
-                    <input type="text" id="new-url" placeholder="https://dereklin1429.github.io/..." required>
-                </div>
-                <button type="submit">新增</button>
-            </form>
+            <h2>⚙️ 管理應用程式</h2>
             
-            <hr>
-
-            <h3>管理現有按鈕</h3>
-            <div id="settings-list">
+            <div class="add-form">
+                <h3>新增項目</h3>
+                <label>選擇群組</label>
+                <select id="new-group-select">
+                    <option value="0">第一組 (賴桑專區)</option>
+                    <option value="1">第二組 (混練維修)</option>
+                    <option value="2">第三組 (保養查核)</option>
+                </select>
+                
+                <input type="text" id="new-en" placeholder="英文名稱 (必填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
+                <input type="text" id="new-cn" placeholder="中文名稱 (選填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
+                <input type="text" id="new-url" placeholder="網址 (https://...)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
+                
+                <button class="add-btn" onclick="addNewButton()">
+                    <i class="fas fa-plus"></i> 新增至列表
+                </button>
             </div>
+
+            <hr>
             
-            <p style="margin-top: 15px; color: #666; font-size: 12px;">提示：直接在列表中修改名稱或網址會自動儲存。</p>
+            <h3>編輯現有項目</h3>
+            <div id="settings-list"></div>
             
             <div class="modal-footer">
-                <button id="save-and-return-btn" onclick="saveAndClose()">
-                    <i class="fas fa-save"></i> 儲存並返回
+                <button id="close-modal-btn" onclick="closeModal()">
+                    <i class="fas fa-check"></i> 完成並關閉
                 </button>
                 <button id="reset-btn" onclick="resetToDefault()">
                     <i class="fas fa-undo"></i> 重置所有設定為預設值
                 </button>
             </div>
-            
         </div>
     </div>
 
-
     <script>
         // --------------------------------------------------------
-        // 預設按鈕清單
+        // 資料結構 (分組)
         // --------------------------------------------------------
-        const defaultButtons = [
-            { en: "LAI", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-home" },
-            { en: "LAI Repair History", cn: "賴維修紀錄", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-wrench" },
-            { en: "LAI Maintenance", cn: "賴保養查核", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-check-square" },
-            { en: "MX Repair History", cn: "混練維修紀錄", url: "https://dereklin1429.github.io/Repair-History-MX/", icon: "fa-tools" },
-            { en: "MX Maintenance", cn: "混練保養查核", url: "https://dereklin1429.github.io/M-C-maintenance-MX/", icon: "fa-cogs" },
-            { en: "CT Maintenance", cn: "裁斷保養查核", url: "https://dereklin1429.github.io/Maintenance-CT/", icon: "fa-file-alt" },
-            { en: "EX Maintenance", cn: "押出保養查核", url: "https://dereklin1429.github.io/M-C_Maintenance-EX/", icon: "fa-clipboard-check" },
-            { en: "CL Maintenance", cn: "上膠保養查核", url: "https://dereklin1429.github.io/MC-Maintenance-CL/", icon: "fa-list-ol" }
+        const defaultData = [
+            {
+                title: "賴桑專區 (LAI)",
+                items: [
+                    { en: "LAI Notes", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-home" },
+                    { en: "LAI Repair History", cn: "賴維修紀錄", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-wrench" },
+                    { en: "LAI Maintenance", cn: "賴保養查核", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-check-square" }
+                ]
+            },
+            {
+                title: "混練維修 (MX Repair)",
+                items: [
+                    { en: "MX Repair History", cn: "混練維修紀錄", url: "https://dereklin1429.github.io/Repair-History-MX/", icon: "fa-tools" }
+                ]
+            },
+            {
+                title: "保養查核 (Maintenance)",
+                items: [
+                    { en: "MX Maintenance", cn: "混練保養查核", url: "https://dereklin1429.github.io/M-C-maintenance-MX/", icon: "fa-cogs" },
+                    { en: "CT Maintenance", cn: "裁斷保養查核", url: "https://dereklin1429.github.io/Maintenance-CT/", icon: "fa-file-alt" },
+                    { en: "EX Maintenance", cn: "押出保養查核", url: "https://dereklin1429.github.io/M-C_Maintenance-EX/", icon: "fa-clipboard-check" },
+                    { en: "CL Maintenance", cn: "上膠保養查核", url: "https://dereklin1429.github.io/MC-Maintenance-CL/", icon: "fa-list-ol" }
+                ]
+            }
         ];
 
-        let appButtons = [];
-        const STORAGE_KEY = 'departmentalAppButtonsV3';
+        let appData = [];
+        // 使用新的 Key 避免與舊的格式衝突
+        const STORAGE_KEY = 'departmentalAppButtonsV4_Groups';
 
-        const buttonGrid = document.getElementById('button-grid');
-        const newBtnForm = document.getElementById('new-btn-form');
-        const settingsModal = document.getElementById('settingsModal');
-
-        // 1. 初始化和讀取資料
-        function loadButtons() {
+        // 1. 初始化
+        function loadData() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
-                appButtons = JSON.parse(saved);
+                appData = JSON.parse(saved);
             } else {
-                appButtons = JSON.parse(JSON.stringify(defaultButtons)); 
-                saveButtons();
+                appData = JSON.parse(JSON.stringify(defaultData));
+                saveData();
             }
-            renderMainButtons();
+            renderMain();
         }
 
-        // 2. 儲存資料到 Local Storage
-        function saveButtons() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appButtons));
+        // 2. 儲存
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
         }
 
-        // 3. 渲染主頁按鈕
-        function renderMainButtons() {
-            buttonGrid.innerHTML = ''; 
-            appButtons.forEach(btn => {
-                let nameToDisplay = btn.en;
-                if (btn.cn && btn.cn.trim() !== '') {
-                    nameToDisplay += `<br>(${btn.cn.trim()})`;
-                }
+        // 3. 渲染主畫面
+        function renderMain() {
+            const container = document.getElementById('main-container');
+            container.innerHTML = '';
+
+            appData.forEach((group, groupIndex) => {
+                // 建立群組容器
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'group-container';
                 
-                const link = document.createElement('a');
-                link.className = 'btn-style'; 
-                link.href = btn.url;
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer'; 
-                
-                link.innerHTML = `
-                    <i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i>
-                    <span class="btn-text">${nameToDisplay}</span>
-                `;
-                buttonGrid.appendChild(link);
+                // 標題
+                const title = document.createElement('div');
+                title.className = 'group-title';
+                title.textContent = group.title;
+                groupDiv.appendChild(title);
+
+                // 按鈕網格
+                const grid = document.createElement('div');
+                grid.className = 'button-grid';
+
+                group.items.forEach(btn => {
+                    let nameToDisplay = btn.en;
+                    if (btn.cn && btn.cn.trim() !== '') {
+                        nameToDisplay += `<br>(${btn.cn.trim()})`;
+                    }
+
+                    const link = document.createElement('a');
+                    // 根據組別加上不同的顏色 class: color-group-0, color-group-1, color-group-2
+                    link.className = `btn-style color-group-${groupIndex}`;
+                    link.href = btn.url;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+
+                    link.innerHTML = `
+                        <i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i>
+                        <span class="btn-text">${nameToDisplay}</span>
+                    `;
+                    grid.appendChild(link);
+                });
+
+                groupDiv.appendChild(grid);
+                container.appendChild(groupDiv);
             });
         }
-        
-        // 4. 渲染設定列表
+
+        // 4. 渲染設定列表 (手機版垂直排列)
         function renderSettingsList() {
-            const settingsList = document.getElementById('settings-list');
-            settingsList.innerHTML = '';
-            appButtons.forEach((btn, index) => {
-                const item = document.createElement('div');
-                item.className = 'setting-item';
+            const list = document.getElementById('settings-list');
+            list.innerHTML = '';
 
-                item.innerHTML = `
-                    <input type="text" value="${btn.en}" onchange="updateButton(${index}, 'en', this.value)" placeholder="英文名稱">
-                    <input type="text" value="${btn.cn || ''}" onchange="updateButton(${index}, 'cn', this.value)" placeholder="中文名稱">
-                    <input type="text" value="${btn.url}" onchange="updateButton(${index}, 'url', this.value)" placeholder="網址連結">
-                    <button class="delete-btn" onclick="deleteButton(${index})">刪除</button>
-                `;
-                settingsList.appendChild(item);
+            appData.forEach((group, groupIndex) => {
+                // 分組標題
+                const header = document.createElement('div');
+                header.className = 'setting-group-header';
+                header.textContent = group.title;
+                list.appendChild(header);
+
+                // 項目列表
+                group.items.forEach((item, itemIndex) => {
+                    const div = document.createElement('div');
+                    div.className = 'setting-item';
+                    
+                    // 為了不超出手機畫面，input 改為垂直堆疊
+                    div.innerHTML = `
+                        <label>英文名稱</label>
+                        <input type="text" value="${item.en}" id="input-en-${groupIndex}-${itemIndex}">
+                        
+                        <label>中文名稱</label>
+                        <input type="text" value="${item.cn}" id="input-cn-${groupIndex}-${itemIndex}">
+                        
+                        <label>網址</label>
+                        <input type="text" value="${item.url}" id="input-url-${groupIndex}-${itemIndex}">
+
+                        <div class="item-actions">
+                            <button class="action-btn save-btn" onclick="saveSingleItem(${groupIndex}, ${itemIndex})">
+                                <i class="fas fa-save"></i> 儲存
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteItem(${groupIndex}, ${itemIndex})">
+                                <i class="fas fa-trash-alt"></i> 刪除
+                            </button>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
             });
         }
 
-        // 5. 新增按鈕
-        newBtnForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const enName = document.getElementById('new-en-name').value.trim();
-            const cnName = document.getElementById('new-cn-name').value.trim();
+        // 5. 單項儲存功能 (按鈕旁的儲存)
+        function saveSingleItem(gIndex, iIndex) {
+            const en = document.getElementById(`input-en-${gIndex}-${iIndex}`).value.trim();
+            const cn = document.getElementById(`input-cn-${gIndex}-${iIndex}`).value.trim();
+            const url = document.getElementById(`input-url-${gIndex}-${iIndex}`).value.trim();
+
+            if(!en || !url) {
+                alert("英文名稱與網址不能為空！");
+                return;
+            }
+
+            // 更新資料
+            appData[gIndex].items[iIndex].en = en;
+            appData[gIndex].items[iIndex].cn = cn;
+            appData[gIndex].items[iIndex].url = url;
+
+            saveData();
+            renderMain(); // 更新背後主畫面
+            alert("已儲存變更！");
+        }
+
+        // 6. 刪除項目
+        function deleteItem(gIndex, iIndex) {
+            const target = appData[gIndex].items[iIndex];
+            if(confirm(`確定要刪除 "${target.en}" 嗎？`)) {
+                appData[gIndex].items.splice(iIndex, 1);
+                saveData();
+                renderMain();
+                renderSettingsList(); // 重新渲染設定列表
+            }
+        }
+
+        // 7. 新增項目
+        function addNewButton() {
+            const gIndex = document.getElementById('new-group-select').value;
+            const en = document.getElementById('new-en').value.trim();
+            const cn = document.getElementById('new-cn').value.trim();
             const url = document.getElementById('new-url').value.trim();
-            
-            if (!enName || !url) {
+
+            if (!en || !url) {
                 alert('英文名稱和網址連結為必填項。');
                 return;
             }
-            
-            const randomIcons = ["fa-long-arrow-alt-right", "fa-arrow-right", "fa-angle-right", "fa-chevron-right", "fa-play", "fa-bullseye", "fa-rocket"];
+
+            const randomIcons = ["fa-arrow-right", "fa-star", "fa-circle", "fa-check"];
             const icon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
 
-            const newBtn = { en: enName, cn: cnName, url: url, icon };
+            appData[gIndex].items.push({ en, cn, url, icon });
             
-            appButtons.push(newBtn);
-            saveButtons();
-            renderMainButtons();
+            saveData();
+            renderMain();
             renderSettingsList();
             
-            newBtnForm.reset();
-        });
+            // 清空輸入框
+            document.getElementById('new-en').value = '';
+            document.getElementById('new-cn').value = '';
+            document.getElementById('new-url').value = '';
+            alert("新增成功！");
+        }
 
-        // 6. 刪除按鈕
-        function deleteButton(index) {
-            const name = appButtons[index].en + (appButtons[index].cn ? `(${appButtons[index].cn})` : '');
-            if (confirm(`確定要刪除按鈕 "${name}" 嗎？`)) {
-                appButtons.splice(index, 1);
-                saveButtons();
-                renderMainButtons();
-                renderSettingsList();
-            }
-        }
-        
-        // 7. 更新按鈕
-        function updateButton(index, field, value) {
-            value = value.trim();
-            if (field === 'en') {
-                appButtons[index].en = value;
-            } else if (field === 'cn') {
-                appButtons[index].cn = value;
-            } else if (field === 'url') {
-                appButtons[index].url = value;
-            }
-            saveButtons();
-            renderMainButtons();
-        }
-        
-        // 8. 重置功能
+        // 8. 重置
         function resetToDefault() {
-            if (confirm("⚠️ 警告：這將刪除所有自訂的按鈕，並恢復為系統預設值。\n\n確定要繼續嗎？")) {
-                appButtons = JSON.parse(JSON.stringify(defaultButtons));
-                saveButtons();
-                renderMainButtons();
+            if (confirm("⚠️ 警告：這將刪除所有修改，恢復為預設值。確定嗎？")) {
+                appData = JSON.parse(JSON.stringify(defaultData));
+                saveData();
+                renderMain();
                 renderSettingsList();
-                alert("已成功恢復為預設設定！");
+                alert("已恢復預設值。");
             }
         }
 
-        // 9. Modal 相關
+        // Modal 控制
+        const modal = document.getElementById('settingsModal');
         function openModal() {
-            renderSettingsList(); 
-            settingsModal.style.display = "block";
-            if (window.innerWidth <= 768) {
-                const content = settingsModal.querySelector('.modal-content');
-                if(content) content.scrollTop = 0;
-            }
+            renderSettingsList();
+            modal.style.display = "block";
         }
-
         function closeModal() {
-            settingsModal.style.display = "none";
+            modal.style.display = "none";
         }
-        
-        function saveAndClose() {
-            saveButtons(); 
-            closeModal();
+        window.onclick = function(e) {
+            if(e.target == modal) closeModal();
         }
 
-        window.onclick = function(event) {
-            if (event.target == settingsModal) {
-                closeModal();
-            }
-        }
-
-        loadButtons();
+        // 啟動
+        loadData();
 
     </script>
-
 </body>
 </html>
