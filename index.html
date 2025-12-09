@@ -130,26 +130,19 @@
         }
         .color-group-3:active { box-shadow: none; }
 
-        /* 第五組顏色 (紅色 - 機械故障訊息) */
+        /* --- [新增] 第五組顏色 (紅色 - 機械故障訊息) --- */
         .color-group-4 {
             background: linear-gradient(to bottom, #F44336, #D32F2F);
             box-shadow: 0 3px 0 #B71C1C;
         }
         .color-group-4:active { box-shadow: none; }
 
-        /* 第六組顏色 (青色 - 5S稽核) */
+        /* --- [新增] 第六組顏色 (青色 - 5S稽核) --- */
         .color-group-5 {
             background: linear-gradient(to bottom, #00BCD4, #0097A7);
             box-shadow: 0 3px 0 #006064;
         }
         .color-group-5:active { box-shadow: none; }
-
-        /* --- [新增] 第七組顏色 (深藍色 - 資料彙整) --- */
-        .color-group-6 {
-            background: linear-gradient(to bottom, #3F51B5, #303F9F);
-            box-shadow: 0 3px 0 #1A237E;
-        }
-        .color-group-6:active { box-shadow: none; }
 
 
         /* ---------------------------------- */
@@ -202,10 +195,9 @@
         .header-style-1 { background-color: #2196F3; } 
         .header-style-2 { background-color: #4CAF50; } 
         .header-style-3 { background-color: #9C27B0; } 
+        /* [新增] 對應設定頁面的標題顏色 */
         .header-style-4 { background-color: #F44336; } 
         .header-style-5 { background-color: #00BCD4; }
-        /* [新增] 對應資料彙整頁面的標題顏色 */
-        .header-style-6 { background-color: #3F51B5; }
 
         .setting-item {
             border: 1px solid #ddd; padding: 10px;
@@ -273,7 +265,7 @@
                     <option value="3">第四組 (庫存盤點)</option>
                     <option value="4">第五組 (機械故障訊息)</option>
                     <option value="5">第六組 (5S稽核)</option>
-                    <option value="6">第七組 (資料彙整)</option> </select>
+                </select>
                 
                 <input type="text" id="new-en" placeholder="英文名稱 (必填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
                 <input type="text" id="new-cn" placeholder="中文名稱 (選填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
@@ -345,7 +337,7 @@
                     { en: "RW WH Inventory", cn: "原物料倉庫", url: "https://chiehs1429.github.io/RM-WH-Inventory/", icon: "fa-warehouse" }
                 ]
             },
-            /* --- 第五組：機械故障訊息 --- */
+            /* --- [新增] 第五組：機械故障訊息 --- */
             {
                 title: "機械故障訊息 (Machine NG INFO)",
                 items: [
@@ -355,7 +347,7 @@
                     { en: "Machine NG CT", cn: "裁斷故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CT/", icon: "fa-exclamation-triangle" }
                 ]
             },
-            /* --- 第六組：5S稽核 --- */
+            /* --- [新增] 第六組：5S稽核 --- */
             {
                 title: "5S稽核 (5S-audit)",
                 items: [
@@ -365,24 +357,12 @@
                     { en: "5S audit CT", cn: "裁斷5S稽核", url: "https://dereklin1429.github.io/5S-audit-CT/", icon: "fa-tasks" },
                     { en: "5S audit WH", cn: "倉庫5S稽核", url: "https://dereklin1429.github.io/5S-audit-WH/", icon: "fa-tasks" }
                 ]
-            },
-            /* --- [新增] 第七組：資料彙整 --- */
-            {
-                title: "資料彙整 (Data Aggregation)",
-                items: [
-                    { 
-                        en: "Total Summary", 
-                        cn: "四廠彙整總表", 
-                        url: "https://docs.google.com/spreadsheets/d/18VGiWjdcdmVTsZhMq3gerXfC-ERJyiJ_SwSfcOi1ymI/edit?gid=0#gid=0", 
-                        icon: "fa-database" 
-                    }
-                ]
             }
         ];
 
         let appData = [];
-        // [修改] 更新 Key 為 V10 以確保載入新的彙整按鈕
-        const STORAGE_KEY = 'departmentalAppButtonsV10_Admin';
+        // [修改] 更新 Key 為 V8 以便載入新的預設資料 (包含新增的兩個群組)
+        const STORAGE_KEY = 'departmentalAppButtonsV8_Admin';
 
         function loadData() {
             const saved = localStorage.getItem(STORAGE_KEY);
