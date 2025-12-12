@@ -25,34 +25,37 @@
             text-align: center;
             margin-bottom: 10px;
             width: 100%;
-            max-width: 720px;
+            max-width: 720px; /* 手機版預設寬度 */
         }
 
-        h1 { color: #444; margin: 0; font-size: 24px; }
-        .subheader { color: #666; font-size: 14px; margin-top: 5px; }
+        h1 { color: #333; margin: 0; font-size: 24px; text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
+        .subheader { color: #444; font-size: 14px; margin-top: 5px; font-weight: bold; }
 
         /* ---------------------------------- */
         /* 2. 分組容器與標題 */
         /* ---------------------------------- */
         .group-container {
             width: 100%;
-            max-width: 720px;
+            max-width: 720px; /* 手機版預設寬度 */
             margin-bottom: 20px;
         }
 
         .group-title {
-            color: #333;
+            color: #222;
             font-size: 18px;
             font-weight: bold;
             margin: 15px 5px 10px 5px;
             padding-left: 10px;
             border-left: 5px solid #555;
+            background-color: rgba(255,255,255,0.1);
+            padding: 5px 10px;
+            border-radius: 0 4px 4px 0;
         }
 
         .button-grid {
             display: flex;
             flex-wrap: wrap; 
-            gap: 10px;
+            gap: 10px; /* 間隔設定為 10px */
             justify-content: flex-start; 
             padding: 0 5px;
         }
@@ -61,7 +64,8 @@
         /* 3. 按鈕樣式 (依顏色分組) */
         /* ---------------------------------- */
         .btn-style {
-            /* 手機版：一排 3 個 */
+            /* 手機版：一排 3 個 (維持不動) */
+            /* (100% - 2個間隔20px) / 3 */
             width: calc((100% - 20px) / 3); 
             height: 120px; 
             text-decoration: none; 
@@ -91,9 +95,10 @@
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            word-break: break-word;
         }
 
-        /* 鎖頭圖示 (表示連結有密碼) */
+        /* 鎖頭圖示 */
         .lock-indicator {
             position: absolute;
             top: 5px;
@@ -103,56 +108,48 @@
         }
 
         /* 第一組顏色 (橘色) */
-        .color-group-0 {
-            background: linear-gradient(to bottom, #FF8C00, #FF7F00);
-            box-shadow: 0 3px 0 #D46900;
-        }
+        .color-group-0 { background: linear-gradient(to bottom, #FF8C00, #FF7F00); box-shadow: 0 3px 0 #D46900; }
         .color-group-0:active { box-shadow: none; }
 
         /* 第二組顏色 (藍色) */
-        .color-group-1 {
-            background: linear-gradient(to bottom, #2196F3, #1976D2);
-            box-shadow: 0 3px 0 #0D47A1;
-        }
+        .color-group-1 { background: linear-gradient(to bottom, #2196F3, #1976D2); box-shadow: 0 3px 0 #0D47A1; }
         .color-group-1:active { box-shadow: none; }
 
         /* 第三組顏色 (綠色) */
-        .color-group-2 {
-            background: linear-gradient(to bottom, #4CAF50, #388E3C);
-            box-shadow: 0 3px 0 #1B5E20;
-        }
+        .color-group-2 { background: linear-gradient(to bottom, #4CAF50, #388E3C); box-shadow: 0 3px 0 #1B5E20; }
         .color-group-2:active { box-shadow: none; }
 
         /* 第四組顏色 (紫色) */
-        .color-group-3 {
-            background: linear-gradient(to bottom, #9C27B0, #7B1FA2);
-            box-shadow: 0 3px 0 #4A148C;
-        }
+        .color-group-3 { background: linear-gradient(to bottom, #9C27B0, #7B1FA2); box-shadow: 0 3px 0 #4A148C; }
         .color-group-3:active { box-shadow: none; }
 
-        /* --- [新增] 第五組顏色 (紅色 - 機械故障訊息) --- */
-        .color-group-4 {
-            background: linear-gradient(to bottom, #F44336, #D32F2F);
-            box-shadow: 0 3px 0 #B71C1C;
-        }
+        /* 第五組顏色 (紅色) */
+        .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; }
         .color-group-4:active { box-shadow: none; }
 
-        /* --- [新增] 第六組顏色 (青色 - 5S稽核) --- */
-        .color-group-5 {
-            background: linear-gradient(to bottom, #00BCD4, #0097A7);
-            box-shadow: 0 3px 0 #006064;
-        }
+        /* 第六組顏色 (青色) */
+        .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; }
         .color-group-5:active { box-shadow: none; }
 
 
         /* ---------------------------------- */
-        /* 4. 電腦版調整 */
+        /* 4. 電腦版調整 (修改處) */
         /* ---------------------------------- */
         @media (min-width: 769px) {
-            .btn-style {
-                width: 200px; height: 180px;
-                margin-right: 15px; margin-bottom: 15px;
+            /* 放寬電腦版的容器寬度，讓5個按鈕排得下 */
+            .header-container, .group-container {
+                max-width: 1200px;
             }
+
+            .btn-style {
+                /* 計算公式：(100% 寬度 - 4個間隔共40px) / 5個按鈕 */
+                width: calc((100% - 40px) / 5);
+                height: 180px;
+                /* 移除原本的 margin，統一交給 gap 控制 */
+                margin-right: 0; 
+                margin-bottom: 0;
+            }
+            
             .btn-icon { font-size: 60px; margin-bottom: 15px; }
             .btn-text { font-size: 18px; }
             .lock-indicator { top: 10px; right: 10px; font-size: 16px; }
@@ -164,11 +161,13 @@
         #settings-btn {
             position: fixed; bottom: 20px; right: 20px;
             width: 50px; height: 50px; border-radius: 50%;
-            background-color: #333; /* 深色表示後台 */
+            background-color: #333; 
             color: white; border: 2px solid #fff;
             box-shadow: 0 4px 8px rgba(0,0,0,0.4); z-index: 100;
             font-size: 24px; cursor: pointer;
+            transition: transform 0.2s;
         }
+        #settings-btn:hover { transform: scale(1.1); }
 
         .modal {
             display: none; position: fixed; z-index: 101;
@@ -181,13 +180,9 @@
             min-height: 100vh; padding: 20px; box-sizing: border-box;
         }
 
-        /* 設定列表項目 */
         .setting-group-header {
-            padding: 10px;
-            font-weight: bold; 
-            margin-top: 20px; 
-            border-radius: 4px;
-            color: white; 
+            padding: 10px; font-weight: bold; margin-top: 20px; 
+            border-radius: 4px; color: white; 
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
@@ -195,7 +190,6 @@
         .header-style-1 { background-color: #2196F3; } 
         .header-style-2 { background-color: #4CAF50; } 
         .header-style-3 { background-color: #9C27B0; } 
-        /* [新增] 對應設定頁面的標題顏色 */
         .header-style-4 { background-color: #F44336; } 
         .header-style-5 { background-color: #00BCD4; }
 
@@ -207,33 +201,30 @@
         }
 
         .setting-item label { font-size: 12px; color: #666; margin-bottom: -5px; }
-        
         .setting-item input[type="text"] {
             padding: 8px; border: 1px solid #ccc; border-radius: 4px;
             width: 100%; box-sizing: border-box;
         }
 
         .item-actions { display: flex; gap: 10px; margin-top: 5px; }
-
         .action-btn {
             flex: 1; padding: 10px; border: none; border-radius: 4px;
             color: white; cursor: pointer; font-size: 14px;
             display: flex; align-items: center; justify-content: center; gap: 5px;
         }
-
         .save-btn { background-color: #2196F3; } 
         .delete-btn { background-color: #f44336; } 
 
         .modal-footer { margin-top: 30px; display: flex; flex-direction: column; gap: 10px; padding-bottom: 30px;}
-        #close-modal-btn { background-color: #666; color: white; padding: 12px; border: none; border-radius: 4px; width: 100%; font-size: 16px;}
-        #reset-btn { background-color: #999; color: white; padding: 12px; border: none; border-radius: 4px; width: 100%; }
+        #close-modal-btn { background-color: #666; color: white; padding: 12px; border: none; border-radius: 4px; width: 100%; font-size: 16px; cursor: pointer;}
+        #reset-btn { background-color: #999; color: white; padding: 12px; border: none; border-radius: 4px; width: 100%; cursor: pointer;}
 
         .add-form {
             background: #f9f9f9; padding: 15px; border: 1px solid #ddd;
             border-radius: 8px; margin-bottom: 20px;
         }
         .add-form select { width: 100%; padding: 8px; margin-bottom: 10px; }
-        .add-btn { width: 100%; background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; font-size: 16px;}
+        .add-btn { width: 100%; background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;}
 
     </style>
 </head>
@@ -259,12 +250,11 @@
                 <h3>新增項目</h3>
                 <label>選擇群組</label>
                 <select id="new-group-select">
-                    <option value="0">第一組 (賴桑專區)</option>
-                    <option value="1">第二組 (維修紀錄)</option>
-                    <option value="2">第三組 (保養查核)</option>
-                    <option value="3">第四組 (庫存盤點)</option>
-                    <option value="4">第五組 (機械故障訊息)</option>
-                    <option value="5">第六組 (5S稽核)</option>
+                    <option value="0">第一組 (機械故障訊息)</option>
+                    <option value="1">第二組 (庫存盤點)</option>
+                    <option value="2">第三組 (5S查核)</option>
+                    <option value="3">第四組 (保養查核)</option>
+                    <option value="4">第五組 (維修紀錄)</option>
                 </select>
                 
                 <input type="text" id="new-en" placeholder="英文名稱 (必填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
@@ -300,21 +290,37 @@
         const ADMIN_PASSWORD = "88888888"; // 【後台密碼】進入設定用 (預設 88888888)
 
         // --------------------------------------------------------
-        // 資料結構 (分組)
+        // 資料結構 (分組) - 已重新排序
         // --------------------------------------------------------
         const defaultData = [
             {
-                title: "賴桑專區 (LAI)",
+                title: "機械故障訊息 (Machine NG INFO)",
                 items: [
-                    { en: "LAI Notes", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-home", password: "159098" },
-                    { en: "LAI Repair History", cn: "賴維修紀錄", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-wrench" },
-                    { en: "LAI Maintenance", cn: "賴保養查核", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-check-square" }
+                    { en: "Machine NG MX", cn: "混練故障訊息", url: "https://dereklin1429.github.io/Machine-NG-MX/", icon: "fa-exclamation-triangle" },
+                    { en: "Machine NG CL", cn: "上膠故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CL/", icon: "fa-exclamation-triangle" },
+                    { en: "Machine NG EX", cn: "押出故障訊息", url: "https://dereklin1429.github.io/Machine-NG-EX/", icon: "fa-exclamation-triangle" },
+                    { en: "Machine NG CT", cn: "裁斷故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CT/", icon: "fa-exclamation-triangle" }
                 ]
             },
             {
-                title: "維修紀錄 (Repair History)",
+                title: "庫存盤點 (Inventory)",
                 items: [
-                    { en: "MX Repair History", cn: "混練維修紀錄", url: "https://dereklin1429.github.io/Repair-History-MX/", icon: "fa-tools" }
+                    { en: "Mixing Inventory", cn: "混練盤點", url: "https://chiehs1429.github.io/Mixing/", icon: "fa-cubes" },
+                    { en: "Extrusion Inventory", cn: "押出盤點", url: "https://chiehs1429.github.io/Extrusion_app/", icon: "fa-layer-group" },
+                    { en: "Calendering Inventory", cn: "上膠盤點", url: "https://chiehs1429.github.io/Calendering/", icon: "fa-scroll" },
+                    { en: "CUTTING Inventory", cn: "裁斷盤點", url: "https://chiehs1429.github.io/CUTTING-Inventory/", icon: "fa-cut" },
+                    { en: "RW WH Inventory", cn: "原物料倉庫", url: "https://chiehs1429.github.io/RM-WH-Inventory/", icon: "fa-warehouse" },
+                    { en: "PONE QR Code", cn: "QRCode 生成", url: "https://dereklin1429.github.io/PONE-QRCOED/", icon: "fa-qrcode" }
+                ]
+            },
+            {
+                title: "5S查核 (5S-audit)",
+                items: [
+                    { en: "5S audit MX", cn: "混練5S稽核", url: "https://dereklin1429.github.io/5S-audit_MX/", icon: "fa-tasks" },
+                    { en: "5S audit CL", cn: "上膠5S稽核", url: "https://dereklin1429.github.io/5S-audit_CL/", icon: "fa-tasks" },
+                    { en: "5S audit EX", cn: "押出5S稽核", url: "https://dereklin1429.github.io/5S-audit-EX/", icon: "fa-tasks" },
+                    { en: "5S audit CT", cn: "裁斷5S稽核", url: "https://dereklin1429.github.io/5S-audit-CT/", icon: "fa-tasks" },
+                    { en: "5S audit WH", cn: "倉庫5S稽核", url: "https://dereklin1429.github.io/5S-audit-WH/", icon: "fa-tasks" }
                 ]
             },
             {
@@ -328,41 +334,16 @@
                 ]
             },
             {
-                title: "庫存盤點 (Inventory)",
+                title: "維修紀錄 (Repair History)",
                 items: [
-                    { en: "Mixing Inventory", cn: "混練盤點", url: "https://chiehs1429.github.io/Mixing/", icon: "fa-cubes" },
-                    { en: "Extrusion Inventory", cn: "押出盤點", url: "https://chiehs1429.github.io/Extrusion_app/", icon: "fa-layer-group" },
-                    { en: "Calendering Inventory", cn: "上膠盤點", url: "https://chiehs1429.github.io/Calendering/", icon: "fa-scroll" },
-                    { en: "CUTTING Inventory", cn: "裁斷盤點", url: "https://chiehs1429.github.io/CUTTING-Inventory/", icon: "fa-cut" },
-                    { en: "RW WH Inventory", cn: "原物料倉庫", url: "https://chiehs1429.github.io/RM-WH-Inventory/", icon: "fa-warehouse" }
-                ]
-            },
-            /* --- [新增] 第五組：機械故障訊息 --- */
-            {
-                title: "機械故障訊息 (Machine NG INFO)",
-                items: [
-                    { en: "Machine NG MX", cn: "混練故障訊息", url: "https://dereklin1429.github.io/Machine-NG-MX/", icon: "fa-exclamation-triangle" },
-                    { en: "Machine NG CL", cn: "上膠故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CL/", icon: "fa-exclamation-triangle" },
-                    { en: "Machine NG EX", cn: "押出故障訊息", url: "https://dereklin1429.github.io/Machine-NG-EX/", icon: "fa-exclamation-triangle" },
-                    { en: "Machine NG CT", cn: "裁斷故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CT/", icon: "fa-exclamation-triangle" }
-                ]
-            },
-            /* --- [新增] 第六組：5S稽核 --- */
-            {
-                title: "5S稽核 (5S-audit)",
-                items: [
-                    { en: "5S audit MX", cn: "混練5S稽核", url: "https://dereklin1429.github.io/5S-audit_MX/", icon: "fa-tasks" },
-                    { en: "5S audit CL", cn: "上膠5S稽核", url: "https://dereklin1429.github.io/5S-audit_CL/", icon: "fa-tasks" },
-                    { en: "5S audit EX", cn: "押出5S稽核", url: "https://dereklin1429.github.io/5S-audit-EX/", icon: "fa-tasks" },
-                    { en: "5S audit CT", cn: "裁斷5S稽核", url: "https://dereklin1429.github.io/5S-audit-CT/", icon: "fa-tasks" },
-                    { en: "5S audit WH", cn: "倉庫5S稽核", url: "https://dereklin1429.github.io/5S-audit-WH/", icon: "fa-tasks" }
+                    { en: "MX Repair History", cn: "混練維修紀錄", url: "https://dereklin1429.github.io/Repair-History-MX/", icon: "fa-tools" }
                 ]
             }
         ];
 
         let appData = [];
-        // [修改] 更新 Key 為 V8 以便載入新的預設資料 (包含新增的兩個群組)
-        const STORAGE_KEY = 'departmentalAppButtonsV8_Admin';
+        // 更新 STORAGE_KEY 以強制載入新順序
+        const STORAGE_KEY = 'departmentalAppButtonsV12_Admin';
 
         function loadData() {
             const saved = localStorage.getItem(STORAGE_KEY);
@@ -405,7 +386,6 @@
                     link.className = `btn-style color-group-${groupIndex}`;
                     link.href = btn.url;
                     
-                    // 個別連結的密碼邏輯
                     if (btn.password && btn.password.trim() !== "") {
                         link.innerHTML += `<i class="fas fa-lock lock-indicator"></i>`;
                         link.onclick = function(e) {
@@ -546,7 +526,6 @@
 
         const modal = document.getElementById('settingsModal');
 
-        // 【核心修改】進入後台檢查密碼
         function checkAdminAndOpen() {
             const input = prompt("🔐 請輸入管理員密碼以進入後台設定：");
             if (input === ADMIN_PASSWORD) {
