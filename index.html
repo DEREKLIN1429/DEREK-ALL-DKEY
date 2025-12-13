@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>部門應用程式網站 (Departmental Application Index)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
@@ -19,13 +19,14 @@
             padding: 20px 5px;
             margin: 0;
             min-height: 100vh;
+            box-sizing: border-box;
         }
 
         .header-container {
             text-align: center;
             margin-bottom: 10px;
             width: 100%;
-            max-width: 720px; /* 手機版預設寬度 */
+            max-width: 720px;
         }
 
         h1 { color: #333; margin: 0; font-size: 24px; text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
@@ -36,7 +37,7 @@
         /* ---------------------------------- */
         .group-container {
             width: 100%;
-            max-width: 720px; /* 手機版預設寬度 */
+            max-width: 720px;
             margin-bottom: 20px;
         }
 
@@ -55,17 +56,16 @@
         .button-grid {
             display: flex;
             flex-wrap: wrap; 
-            gap: 10px; /* 間隔設定為 10px */
+            gap: 10px;
             justify-content: flex-start; 
             padding: 0 5px;
         }
 
         /* ---------------------------------- */
-        /* 3. 按鈕樣式 (依顏色分組) */
+        /* 3. 按鈕樣式 */
         /* ---------------------------------- */
         .btn-style {
-            /* 手機版：一排 3 個 (維持不動) */
-            /* (100% - 2個間隔20px) / 3 */
+            /* 手機版：一排 3 個 */
             width: calc((100% - 20px) / 3); 
             height: 120px; 
             text-decoration: none; 
@@ -81,11 +81,13 @@
             padding: 4px;
             box-sizing: border-box;
             transition: transform 0.1s;
+            user-select: none; 
         }
 
         .btn-style:active { transform: translateY(3px); }
 
         .btn-icon { font-size: 28px; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        
         .btn-text { 
             font-size: 13px; 
             font-weight: 800; 
@@ -98,7 +100,6 @@
             word-break: break-word;
         }
 
-        /* 鎖頭圖示 */
         .lock-indicator {
             position: absolute;
             top: 5px;
@@ -107,56 +108,36 @@
             color: rgba(255,255,255,0.8);
         }
 
-        /* 第一組顏色 (橘色) */
+        /* 顏色定義 */
         .color-group-0 { background: linear-gradient(to bottom, #FF8C00, #FF7F00); box-shadow: 0 3px 0 #D46900; }
-        .color-group-0:active { box-shadow: none; }
-
-        /* 第二組顏色 (藍色) */
         .color-group-1 { background: linear-gradient(to bottom, #2196F3, #1976D2); box-shadow: 0 3px 0 #0D47A1; }
-        .color-group-1:active { box-shadow: none; }
-
-        /* 第三組顏色 (綠色) */
         .color-group-2 { background: linear-gradient(to bottom, #4CAF50, #388E3C); box-shadow: 0 3px 0 #1B5E20; }
-        .color-group-2:active { box-shadow: none; }
-
-        /* 第四組顏色 (紫色) */
         .color-group-3 { background: linear-gradient(to bottom, #9C27B0, #7B1FA2); box-shadow: 0 3px 0 #4A148C; }
-        .color-group-3:active { box-shadow: none; }
-
-        /* 第五組顏色 (紅色) */
         .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; }
-        .color-group-4:active { box-shadow: none; }
-
-        /* 第六組顏色 (青色) */
         .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; }
-        .color-group-5:active { box-shadow: none; }
 
+        .btn-style:active { box-shadow: none !important; transform: translateY(3px); }
 
         /* ---------------------------------- */
-        /* 4. 電腦版調整 (修改處) */
+        /* 4. 電腦版調整 */
         /* ---------------------------------- */
         @media (min-width: 769px) {
-            /* 放寬電腦版的容器寬度，讓5個按鈕排得下 */
             .header-container, .group-container {
                 max-width: 1200px;
             }
-
             .btn-style {
-                /* 計算公式：(100% 寬度 - 4個間隔共40px) / 5個按鈕 */
                 width: calc((100% - 40px) / 5);
                 height: 180px;
-                /* 移除原本的 margin，統一交給 gap 控制 */
                 margin-right: 0; 
                 margin-bottom: 0;
             }
-            
             .btn-icon { font-size: 60px; margin-bottom: 15px; }
             .btn-text { font-size: 18px; }
             .lock-indicator { top: 10px; right: 10px; font-size: 16px; }
         }
 
         /* ---------------------------------- */
-        /* 5. 設定按鈕與 Modal */
+        /* 5. 設定按鈕與 Modal (後台) */
         /* ---------------------------------- */
         #settings-btn {
             position: fixed; bottom: 20px; right: 20px;
@@ -172,12 +153,15 @@
         .modal {
             display: none; position: fixed; z-index: 101;
             left: 0; top: 0; width: 100%; height: 100%;
-            overflow-y: auto; background-color: rgba(0,0,0,0.8);
+            overflow-y: auto; 
+            -webkit-overflow-scrolling: touch; 
+            background-color: rgba(0,0,0,0.8);
         }
 
         .modal-content {
             background-color: #fefefe; margin: 0; width: 100%;
             min-height: 100vh; padding: 20px; box-sizing: border-box;
+            max-width: 800px; margin: 0 auto;
         }
 
         .setting-group-header {
@@ -225,7 +209,6 @@
         }
         .add-form select { width: 100%; padding: 8px; margin-bottom: 10px; }
         .add-btn { width: 100%; background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;}
-
     </style>
 </head>
 <body>
@@ -250,7 +233,7 @@
                 <h3>新增項目</h3>
                 <label>選擇群組</label>
                 <select id="new-group-select">
-                    <option value="0">第一組 (機械故障訊息)</option>
+                    <option value="0">第一組 (紀錄彙整專區)</option>
                     <option value="1">第二組 (庫存盤點)</option>
                     <option value="2">第三組 (5S查核)</option>
                     <option value="3">第四組 (保養查核)</option>
@@ -268,7 +251,6 @@
             </div>
 
             <hr>
-            
             <h3>編輯現有項目</h3>
             <div id="settings-list"></div>
             
@@ -287,15 +269,23 @@
         // --------------------------------------------------------
         // 設定區
         // --------------------------------------------------------
-        const ADMIN_PASSWORD = "88888888"; // 【後台密碼】進入設定用 (預設 88888888)
+        const ADMIN_PASSWORD = "88888888"; 
+        // 【重要】更新版本號 v13，強制載入新的預設資料
+        const STORAGE_KEY = 'departmentalAppButtonsV13_Admin';
 
         // --------------------------------------------------------
-        // 資料結構 (分組) - 已重新排序
+        // 預設資料結構
         // --------------------------------------------------------
         const defaultData = [
             {
-                title: "機械故障訊息 (Machine NG INFO)",
+                // 第一組：已修改為紀錄彙整專區
+                title: "紀錄彙整專區 (Record Compilation Zone)",
                 items: [
+                    // 新增的三個連結
+                    { en: "Lai's Notebook", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-book" },
+                    { en: "Repair History", cn: "維修紀錄彙整", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-tools" },
+                    { en: "Check Maintenance", cn: "賴 查核保養", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-clipboard-list" },
+                    // 保留原本的故障訊息 (若不需要可從後台刪除)
                     { en: "Machine NG MX", cn: "混練故障訊息", url: "https://dereklin1429.github.io/Machine-NG-MX/", icon: "fa-exclamation-triangle" },
                     { en: "Machine NG CL", cn: "上膠故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CL/", icon: "fa-exclamation-triangle" },
                     { en: "Machine NG EX", cn: "押出故障訊息", url: "https://dereklin1429.github.io/Machine-NG-EX/", icon: "fa-exclamation-triangle" },
@@ -342,13 +332,16 @@
         ];
 
         let appData = [];
-        // 更新 STORAGE_KEY 以強制載入新順序
-        const STORAGE_KEY = 'departmentalAppButtonsV12_Admin';
 
         function loadData() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
-                appData = JSON.parse(saved);
+                try {
+                    appData = JSON.parse(saved);
+                } catch (e) {
+                    console.error("資料解析錯誤，回復預設值");
+                    appData = JSON.parse(JSON.stringify(defaultData));
+                }
             } else {
                 appData = JSON.parse(JSON.stringify(defaultData));
                 saveData();
@@ -431,13 +424,10 @@
                     div.innerHTML = `
                         <label>英文名稱</label>
                         <input type="text" value="${item.en}" id="input-en-${groupIndex}-${itemIndex}">
-                        
                         <label>中文名稱</label>
                         <input type="text" value="${item.cn}" id="input-cn-${groupIndex}-${itemIndex}">
-                        
                         <label>網址</label>
                         <input type="text" value="${item.url}" id="input-url-${groupIndex}-${itemIndex}">
-                        
                         <label>連結密碼 (選填)</label>
                         <input type="text" value="${item.password || ''}" id="input-pwd-${groupIndex}-${itemIndex}" placeholder="輸入密碼則鎖定連結">
 
@@ -498,7 +488,7 @@
                 return;
             }
 
-            const randomIcons = ["fa-arrow-right", "fa-star", "fa-circle", "fa-check"];
+            const randomIcons = ["fa-arrow-right", "fa-star", "fa-circle", "fa-check", "fa-bookmark"];
             const icon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
 
             appData[gIndex].items.push({ en, cn, url, icon, password: pwd });
@@ -531,10 +521,8 @@
             if (input === ADMIN_PASSWORD) {
                 renderSettingsList();
                 modal.style.display = "block";
-                if (window.innerWidth <= 768) {
-                    const content = modal.querySelector('.modal-content');
-                    if(content) content.scrollTop = 0;
-                }
+                const content = modal.querySelector('.modal-content');
+                if(content) content.scrollTop = 0;
             } else {
                 if (input !== null) {
                     alert("⛔ 密碼錯誤！無法進入後台。");
@@ -551,7 +539,6 @@
         }
 
         loadData();
-
     </script>
 </body>
 </html>
