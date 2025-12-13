@@ -108,13 +108,13 @@
             color: rgba(255,255,255,0.8);
         }
 
-        /* 顏色定義 */
-        .color-group-0 { background: linear-gradient(to bottom, #FF8C00, #FF7F00); box-shadow: 0 3px 0 #D46900; }
-        .color-group-1 { background: linear-gradient(to bottom, #2196F3, #1976D2); box-shadow: 0 3px 0 #0D47A1; }
-        .color-group-2 { background: linear-gradient(to bottom, #4CAF50, #388E3C); box-shadow: 0 3px 0 #1B5E20; }
-        .color-group-3 { background: linear-gradient(to bottom, #9C27B0, #7B1FA2); box-shadow: 0 3px 0 #4A148C; }
-        .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; }
-        .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; }
+        /* 顏色定義 - 自動對應群組索引 */
+        .color-group-0 { background: linear-gradient(to bottom, #FF8C00, #FF7F00); box-shadow: 0 3px 0 #D46900; } /* 橘 */
+        .color-group-1 { background: linear-gradient(to bottom, #2196F3, #1976D2); box-shadow: 0 3px 0 #0D47A1; } /* 藍 */
+        .color-group-2 { background: linear-gradient(to bottom, #4CAF50, #388E3C); box-shadow: 0 3px 0 #1B5E20; } /* 綠 */
+        .color-group-3 { background: linear-gradient(to bottom, #9C27B0, #7B1FA2); box-shadow: 0 3px 0 #4A148C; } /* 紫 */
+        .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; } /* 紅 */
+        .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; } /* 青 */
 
         .btn-style:active { box-shadow: none !important; transform: translateY(3px); }
 
@@ -170,6 +170,7 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
+        /* 後台標題顏色對應 */
         .header-style-0 { background-color: #FF8C00; } 
         .header-style-1 { background-color: #2196F3; } 
         .header-style-2 { background-color: #4CAF50; } 
@@ -234,10 +235,11 @@
                 <label>選擇群組</label>
                 <select id="new-group-select">
                     <option value="0">第一組 (紀錄彙整專區)</option>
-                    <option value="1">第二組 (庫存盤點)</option>
-                    <option value="2">第三組 (5S查核)</option>
-                    <option value="3">第四組 (保養查核)</option>
-                    <option value="4">第五組 (維修紀錄)</option>
+                    <option value="1">第二組 (機械故障資訊)</option>
+                    <option value="2">第三組 (庫存盤點)</option>
+                    <option value="3">第四組 (5S查核)</option>
+                    <option value="4">第五組 (保養查核)</option>
+                    <option value="5">第六組 (維修紀錄)</option>
                 </select>
                 
                 <input type="text" id="new-en" placeholder="英文名稱 (必填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
@@ -270,28 +272,33 @@
         // 設定區
         // --------------------------------------------------------
         const ADMIN_PASSWORD = "88888888"; 
-        // 【重要】更新版本號 v13，強制載入新的預設資料
-        const STORAGE_KEY = 'departmentalAppButtonsV13_Admin';
+        // 【重要】更新版本號 V14，確保載入 6 個群組的資料
+        const STORAGE_KEY = 'departmentalAppButtonsV14_Admin';
 
         // --------------------------------------------------------
-        // 預設資料結構
+        // 預設資料結構 (共 6 組)
         // --------------------------------------------------------
         const defaultData = [
+            // 第 1 區
             {
-                // 第一組：已修改為紀錄彙整專區
                 title: "紀錄彙整專區 (Record Compilation Zone)",
                 items: [
-                    // 新增的三個連結
                     { en: "Lai's Notebook", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-book" },
                     { en: "Repair History", cn: "維修紀錄彙整", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-tools" },
-                    { en: "Check Maintenance", cn: "賴 查核保養", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-clipboard-list" },
-                    // 保留原本的故障訊息 (若不需要可從後台刪除)
+                    { en: "Check Maintenance", cn: "賴 查核保養", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-clipboard-list" }
+                ]
+            },
+            // 第 2 區 (新獨立出的)
+            {
+                title: "機械故障資訊 (Machine NG Info)",
+                items: [
                     { en: "Machine NG MX", cn: "混練故障訊息", url: "https://dereklin1429.github.io/Machine-NG-MX/", icon: "fa-exclamation-triangle" },
                     { en: "Machine NG CL", cn: "上膠故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CL/", icon: "fa-exclamation-triangle" },
                     { en: "Machine NG EX", cn: "押出故障訊息", url: "https://dereklin1429.github.io/Machine-NG-EX/", icon: "fa-exclamation-triangle" },
                     { en: "Machine NG CT", cn: "裁斷故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CT/", icon: "fa-exclamation-triangle" }
                 ]
             },
+            // 第 3 區
             {
                 title: "庫存盤點 (Inventory)",
                 items: [
@@ -303,6 +310,7 @@
                     { en: "PONE QR Code", cn: "QRCode 生成", url: "https://dereklin1429.github.io/PONE-QRCOED/", icon: "fa-qrcode" }
                 ]
             },
+            // 第 4 區
             {
                 title: "5S查核 (5S-audit)",
                 items: [
@@ -313,6 +321,7 @@
                     { en: "5S audit WH", cn: "倉庫5S稽核", url: "https://dereklin1429.github.io/5S-audit-WH/", icon: "fa-tasks" }
                 ]
             },
+            // 第 5 區
             {
                 title: "保養查核 (Maintenance)",
                 items: [
@@ -323,6 +332,7 @@
                     { en: "Container Management", cn: "貨櫃管理資訊", url: "https://dereklin1429.github.io/Vehicle-Management/", icon: "fa-truck" }
                 ]
             },
+            // 第 6 區
             {
                 title: "維修紀錄 (Repair History)",
                 items: [
