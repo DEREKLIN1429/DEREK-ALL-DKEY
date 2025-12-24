@@ -115,6 +115,8 @@
         .color-group-3 { background: linear-gradient(to bottom, #9C27B0, #7B1FA2); box-shadow: 0 3px 0 #4A148C; } /* 紫 */
         .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; } /* 紅 */
         .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; } /* 青 */
+        /* 新增：第 7 組顏色 (桃紅/粉色) */
+        .color-group-6 { background: linear-gradient(to bottom, #E91E63, #C2185B); box-shadow: 0 3px 0 #880E4F; } 
 
         .btn-style:active { box-shadow: none !important; transform: translateY(3px); }
 
@@ -177,6 +179,7 @@
         .header-style-3 { background-color: #9C27B0; } 
         .header-style-4 { background-color: #F44336; } 
         .header-style-5 { background-color: #00BCD4; }
+        .header-style-6 { background-color: #E91E63; } /* 新增對應樣式 */
 
         .setting-item {
             border: 1px solid #ddd; padding: 10px;
@@ -240,6 +243,7 @@
                     <option value="3">第四組 (5S查核)</option>
                     <option value="4">第五組 (保養查核)</option>
                     <option value="5">第六組 (維修紀錄)</option>
+                    <option value="6">第七組 (圖表分析)</option>
                 </select>
                 
                 <input type="text" id="new-en" placeholder="英文名稱 (必填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
@@ -272,11 +276,11 @@
         // 設定區
         // --------------------------------------------------------
         const ADMIN_PASSWORD = "88888888"; 
-        // 【重要】更新版本號 V14，確保載入 6 個群組的資料
-        const STORAGE_KEY = 'departmentalAppButtonsV14_Admin';
+        // 【重要】更新版本號 V15，確保載入含新圖表群組的資料
+        const STORAGE_KEY = 'departmentalAppButtonsV15_Admin';
 
         // --------------------------------------------------------
-        // 預設資料結構 (共 6 組)
+        // 預設資料結構 (更新為 7 組)
         // --------------------------------------------------------
         const defaultData = [
             // 第 1 區
@@ -288,7 +292,7 @@
                     { en: "Check Maintenance", cn: "賴 查核保養", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-clipboard-list" }
                 ]
             },
-            // 第 2 區 (新獨立出的)
+            // 第 2 區
             {
                 title: "機械故障資訊 (Machine NG Info)",
                 items: [
@@ -334,9 +338,17 @@
             },
             // 第 6 區
             {
-                title: "維修紀錄 (Repair History)",
+                title: "一二三級保養紀錄 (Level 123 History)",
                 items: [
-                    { en: "MX Repair History", cn: "混練維修紀錄", url: "https://dereklin1429.github.io/Repair-History-MX/", icon: "fa-tools" }
+                    { en: "MX 123 History", cn: "混練一二三級保養", url: "https://dereklin1429.github.io/Repair-History-MX/", icon: "fa-tools" }
+                ]
+            },
+            // 第 7 區 (新增)
+            {
+                title: "圖表分析 (Chart Analysis)",
+                items: [
+                    // 因為你還沒給我網址，我先填了一個 #，你可以之後在後台修改
+                    { en: "Container Dynamic Management", cn: "貨櫃動態管理", url: "https://copy-of-copy-of-intelligent-container-logistics-d-422314829002.us-west1.run.app/", icon: "fa-chart-line" }
                 ]
             }
         ];
@@ -552,4 +564,3 @@
     </script>
 </body>
 </html>
-
