@@ -1,574 +1,154 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>部門應用程式網站 (Departmental Application Index)</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Mixing Inventory V3</title>
     
+    <!-- CSS Framework -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src='https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js'></script>
+    
+    <!-- Babel for in-browser compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <style>
-        /* ---------------------------------- */
-        /* 1. 基本設定 */
-        /* ---------------------------------- */
-        body {
-            background-color: #A9A9A9; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            padding: 20px 5px;
-            margin: 0;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
+      /* Custom scrollbar for dark theme */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: #333; }
+      ::-webkit-scrollbar-thumb { background: #555; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #777; }
+      body { background-color: #222; color: #fff; touch-action: manipulation; }
+      button { touch-action: manipulation; }
+      
+      /* Viewport Area */
+      .viewport {
+        position: relative;
+        width: 100%;
+        height: 50vh;
+        background: black;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        border: 1px solid #444;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        z-index: 1;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        touch-action: pan-y;
+      }
 
-        .header-container {
-            text-align: center;
-            margin-bottom: 10px;
-            width: 100%;
-            max-width: 720px;
-        }
+      /* Mode Switch Buttons */
+      .mode-switch { display: flex; gap: 8px; margin-bottom: 10px; }
+      .mode-btn {
+        flex: 1; padding: 12px 8px; border: none; border-radius: 12px;
+        background: #333; color: #aaa; font-weight: bold; cursor: pointer; transition: 0.3s;
+        display: flex; flex-direction: column; align-items: center; line-height: 1.2; font-size: 1rem;
+      }
+      .mode-btn small { font-size: 0.75rem; font-weight: normal; opacity: 0.8; margin-top: 2px; }
+      .mode-btn.active { background: #007bff; color: white; box-shadow: 0 0 10px rgba(0,123,255,0.5); }
 
-        h1 { color: #333; margin: 0; font-size: 24px; text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
-        .subheader { color: #444; font-size: 14px; margin-top: 5px; font-weight: bold; }
+      /* Barcode UI */
+      #reader { width: 100%; height: 100%; border-radius: 8px; background: #000; }
+      #reader video { object-fit: cover; width: 100%; height: 100%; }
+      #qr-canvas {
+        position: absolute; top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 20;
+      }
+      #center-guide {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 250px; height: 250px; 
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        z-index: 15;
+        pointer-events: none;
+        box-shadow: 0 0 0 4000px rgba(0,0,0,0.5);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        border-radius: 20px;
+        display: none;
+      }
+      .guide-success {
+        border-color: #00ff00 !important;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.8), 0 0 0 4000px rgba(0,0,0,0.5) !important;
+        background-color: rgba(0, 255, 0, 0.1);
+      }
+      .camera-hint {
+        position: absolute; bottom: 20px; left: 0; right: 0;
+        display: flex; justify-content: center; align-items: center;
+        color: white; font-size: 1.1rem; font-weight: bold;
+        text-align: center; z-index: 25; pointer-events: none;
+        white-space: pre-line;
+        text-shadow: 1px 1px 4px black;
+        display: none;
+      }
 
-        /* ---------------------------------- */
-        /* 2. 分組容器與標題 */
-        /* ---------------------------------- */
-        .group-container {
-            width: 100%;
-            max-width: 720px;
-            margin-bottom: 20px;
-        }
-
-        .group-title {
-            color: #222;
-            font-size: 18px;
-            font-weight: bold;
-            margin: 15px 5px 10px 5px;
-            padding-left: 10px;
-            border-left: 5px solid #555;
-            background-color: rgba(255,255,255,0.1);
-            padding: 5px 10px;
-            border-radius: 0 4px 4px 0;
-        }
-
-        .button-grid {
-            display: flex;
-            flex-wrap: wrap; 
-            gap: 10px;
-            justify-content: flex-start; 
-            padding: 0 5px;
-        }
-
-        /* ---------------------------------- */
-        /* 3. 按鈕樣式 */
-        /* ---------------------------------- */
-        .btn-style {
-            /* 手機版：一排 3 個 */
-            width: calc((100% - 20px) / 3); 
-            height: 120px; 
-            text-decoration: none; 
-            color: #fff; 
-            border-radius: 12px; 
-            cursor: pointer;
-            position: relative; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 4px;
-            box-sizing: border-box;
-            transition: transform 0.1s;
-            user-select: none; 
-        }
-
-        .btn-style:active { transform: translateY(3px); }
-
-        .btn-icon { font-size: 28px; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
-        
-        .btn-text { 
-            font-size: 13px; 
-            font-weight: 800; 
-            line-height: 1.2; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.4); 
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            word-break: break-word;
-        }
-
-        .lock-indicator {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            font-size: 12px;
-            color: rgba(255,255,255,0.8);
-        }
-
-        /* 顏色定義 - 自動對應群組索引 */
-        .color-group-0 { background: linear-gradient(to bottom, #FF8C00, #FF7F00); box-shadow: 0 3px 0 #D46900; } /* 橘 */
-        .color-group-1 { background: linear-gradient(to bottom, #2196F3, #1976D2); box-shadow: 0 3px 0 #0D47A1; } /* 藍 */
-        .color-group-2 { background: linear-gradient(to bottom, #4CAF50, #388E3C); box-shadow: 0 3px 0 #1B5E20; } /* 綠 */
-        .color-group-3 { background: linear-gradient(to bottom, #9C27B0, #7B1FA2); box-shadow: 0 3px 0 #4A148C; } /* 紫 */
-        .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; } /* 紅 */
-        .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; } /* 青 */
-        /* 新增：第 7 組顏色 (桃紅/粉色) */
-        .color-group-6 { background: linear-gradient(to bottom, #E91E63, #C2185B); box-shadow: 0 3px 0 #880E4F; } 
-
-        .btn-style:active { box-shadow: none !important; transform: translateY(3px); }
-
-        /* ---------------------------------- */
-        /* 4. 電腦版調整 */
-        /* ---------------------------------- */
-        @media (min-width: 769px) {
-            .header-container, .group-container {
-                max-width: 1200px;
-            }
-            .btn-style {
-                width: calc((100% - 40px) / 5);
-                height: 180px;
-                margin-right: 0; 
-                margin-bottom: 0;
-            }
-            .btn-icon { font-size: 60px; margin-bottom: 15px; }
-            .btn-text { font-size: 18px; }
-            .lock-indicator { top: 10px; right: 10px; font-size: 16px; }
-        }
-
-        /* ---------------------------------- */
-        /* 5. 設定按鈕與 Modal (後台) */
-        /* ---------------------------------- */
-        #settings-btn {
-            position: fixed; bottom: 20px; right: 20px;
-            width: 50px; height: 50px; border-radius: 50%;
-            background-color: #333; 
-            color: white; border: 2px solid #fff;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4); z-index: 100;
-            font-size: 24px; cursor: pointer;
-            transition: transform 0.2s;
-        }
-        #settings-btn:hover { transform: scale(1.1); }
-
-        .modal {
-            display: none; position: fixed; z-index: 101;
-            left: 0; top: 0; width: 100%; height: 100%;
-            overflow-y: auto; 
-            -webkit-overflow-scrolling: touch; 
-            background-color: rgba(0,0,0,0.8);
-        }
-
-        .modal-content {
-            background-color: #fefefe; margin: 0; width: 100%;
-            min-height: 100vh; padding: 20px; box-sizing: border-box;
-            max-width: 800px; margin: 0 auto;
-        }
-
-        .setting-group-header {
-            padding: 10px; font-weight: bold; margin-top: 20px; 
-            border-radius: 4px; color: white; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-
-        /* 後台標題顏色對應 */
-        .header-style-0 { background-color: #FF8C00; } 
-        .header-style-1 { background-color: #2196F3; } 
-        .header-style-2 { background-color: #4CAF50; } 
-        .header-style-3 { background-color: #9C27B0; } 
-        .header-style-4 { background-color: #F44336; } 
-        .header-style-5 { background-color: #00BCD4; }
-        .header-style-6 { background-color: #E91E63; } /* 新增對應樣式 */
-
-        .setting-item {
-            border: 1px solid #ddd; padding: 10px;
-            margin-bottom: 10px; border-radius: 5px;
-            background-color: #fff;
-            display: flex; flex-direction: column; gap: 8px;
-        }
-
-        .setting-item label { font-size: 12px; color: #666; margin-bottom: -5px; }
-        .setting-item input[type="text"] {
-            padding: 8px; border: 1px solid #ccc; border-radius: 4px;
-            width: 100%; box-sizing: border-box;
-        }
-
-        .item-actions { display: flex; gap: 10px; margin-top: 5px; }
-        .action-btn {
-            flex: 1; padding: 10px; border: none; border-radius: 4px;
-            color: white; cursor: pointer; font-size: 14px;
-            display: flex; align-items: center; justify-content: center; gap: 5px;
-        }
-        .save-btn { background-color: #2196F3; } 
-        .delete-btn { background-color: #f44336; } 
-
-        .modal-footer { margin-top: 30px; display: flex; flex-direction: column; gap: 10px; padding-bottom: 30px;}
-        #close-modal-btn { background-color: #666; color: white; padding: 12px; border: none; border-radius: 4px; width: 100%; font-size: 16px; cursor: pointer;}
-        #reset-btn { background-color: #999; color: white; padding: 12px; border: none; border-radius: 4px; width: 100%; cursor: pointer;}
-
-        .add-form {
-            background: #f9f9f9; padding: 15px; border: 1px solid #ddd;
-            border-radius: 8px; margin-bottom: 20px;
-        }
-        .add-form select { width: 100%; padding: 8px; margin-bottom: 10px; }
-        .add-btn { width: 100%; background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;}
+      /* OCR UI */
+      #ocr-video { width: 100%; height: 100%; object-fit: cover; display: none; }
+      .scan-guide-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none; display: none; z-index: 10;
+      }
+      .guide-box {
+        position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%; height: 4.5%;
+        border: 2px solid #ff4d4d;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+        border-radius: 4px; transition: 0.3s all;
+        display: flex; justify-content: center; align-items: center;
+      }
+      .guide-box.ready { border-color: #00ff00; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.8); }
+      .guide-box.paused { border-color: #007bff; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6); }
+      
+      .guide-line {
+        position: absolute;
+        width: 100%; height: 2px;
+        background-color: rgba(255, 77, 77, 0.5);
+        pointer-events: none; transition: 0.3s all; box-shadow: 0 0 2px rgba(255,0,0,0.5);
+        display: none;
+      }
+      
+      .guide-text {
+        position: absolute; 
+        top: 50%; left: 50%; 
+        transform: translate(-50%, -50%);
+        width: 100%;
+        text-align: center; 
+        color: #ff4d4d; 
+        font-size: 1.1rem; 
+        font-weight: bold;
+        text-shadow: 1px 1px 2px black, -1px -1px 2px black; 
+        transition: 0.3s all;
+        padding: 0 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .guide-box.ready .guide-text { color: #00ff00; }
+      .guide-box.paused .guide-text { color: #007bff; }
     </style>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react/": "https://esm.sh/react@18.2.0/",
+    "react-dom/": "https://esm.sh/react-dom@^18.2.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
 </head>
 <body>
+    <div id="root"></div>
 
-    <div class="header-container">
-        <h1>🏢 部門應用程式索引</h1>
-        <div class="subheader">Departmental Application Index</div>
-    </div>
-
-    <div id="main-container"></div>
-    
-    <button id="settings-btn" onclick="checkAdminAndOpen()">
-        <i class="fas fa-cog"></i>
-    </button>
-    
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-            <h2>⚙️ 管理應用程式 (後台)</h2>
-            <p style="font-size:12px; color:#666;">您已登入管理員模式</p>
-            
-            <div class="add-form">
-                <h3>新增項目</h3>
-                <label>選擇群組</label>
-                <select id="new-group-select">
-                    <option value="0">第一組 (紀錄彙整專區)</option>
-                    <option value="1">第二組 (機械故障資訊)</option>
-                    <option value="2">第三組 (庫存盤點)</option>
-                    <option value="3">第四組 (5S查核)</option>
-                    <option value="4">第五組 (保養查核)</option>
-                    <option value="5">第六組 (維修紀錄)</option>
-                    <option value="6">第七組 (圖表分析)</option>
-                </select>
-                
-                <input type="text" id="new-en" placeholder="英文名稱 (必填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
-                <input type="text" id="new-cn" placeholder="中文名稱 (選填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
-                <input type="text" id="new-url" placeholder="網址 (https://...)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
-                <input type="text" id="new-pwd" placeholder="個別連結密碼 (選填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box; border: 1px solid #ffa500;">
-                
-                <button class="add-btn" onclick="addNewButton()">
-                    <i class="fas fa-plus"></i> 新增至列表
-                </button>
-            </div>
-
-            <hr>
-            <h3>編輯現有項目</h3>
-            <div id="settings-list"></div>
-            
-            <div class="modal-footer">
-                <button id="close-modal-btn" onclick="closeModal()">
-                    <i class="fas fa-check"></i> 完成並關閉
-                </button>
-                <button id="reset-btn" onclick="resetToDefault()">
-                    <i class="fas fa-undo"></i> 重置所有設定為預設值
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // --------------------------------------------------------
-        // 設定區
-        // --------------------------------------------------------
-        const ADMIN_PASSWORD = "88888888"; 
-        // 【重要】更新版本號 V15，確保載入含新圖表群組的資料
-        const STORAGE_KEY = 'departmentalAppButtonsV15_Admin';
-
-        // --------------------------------------------------------
-        // 預設資料結構 (更新為 7 組)
-        // --------------------------------------------------------
-        const defaultData = [
-            // 第 1 區
-            {
-                title: "紀錄彙整專區 (Record Compilation Zone)",
-                items: [
-                    { en: "Lai's Notebook", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-book" },
-                    { en: "Repair History", cn: "維修紀錄彙整", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-tools" },
-                    { en: "Check Maintenance", cn: "賴 查核保養", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-clipboard-list" }
-                ]
-            },
-            // 第 2 區
-            {
-                title: "機械故障資訊 (Machine NG Info)",
-                items: [
-                    { en: "Machine NG MX", cn: "混練故障訊息", url: "https://dereklin1429.github.io/Machine-NG-MX/", icon: "fa-exclamation-triangle" },
-                    { en: "Machine NG CL", cn: "上膠故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CL/", icon: "fa-exclamation-triangle" },
-                    { en: "Machine NG EX", cn: "押出故障訊息", url: "https://dereklin1429.github.io/Machine-NG-EX/", icon: "fa-exclamation-triangle" },
-                    { en: "Machine NG CT", cn: "裁斷故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CT/", icon: "fa-exclamation-triangle" }
-                ]
-            },
-            // 第 3 區
-            {
-                title: "庫存盤點 (Inventory)",
-                items: [
-                    { en: "Mixing Inventory", cn: "混練盤點", url: "https://dereklin1429.github.io/derekmxInventory01/", icon: "fa-cubes" },
-                    { en: "Extrusion Inventory", cn: "押出盤點", url: "https://dereklin1429.github.io/derekexInventory01/", icon: "fa-layer-group" },
-                    { en: "Calendering Inventory", cn: "上膠盤點", url: "https://dereklin1429.github.io/derekclInventory01/", icon: "fa-scroll" },
-                    { en: "CUTTING Inventory", cn: "裁斷盤點", url: "https://dereklin1429.github.io/derekctInventory01/", icon: "fa-cut" },
-                    { en: "RW WH Inventory", cn: "原物料倉庫", url: "https://dereklin1429.github.io/derekrmwnInventory01/", icon: "fa-warehouse" },
-                    { en: "PONE QR Code", cn: "QRCode 生成", url: "https://dereklin1429.github.io/derekqrcoed01/", icon: "fa-qrcode" }
-                ]
-            },
-            // 第 4 區
-            {
-                title: "5S查核 (5S-audit)",
-                items: [
-                    { en: "5S audit MX", cn: "混練5S稽核", url: "https://dereklin1429.github.io/5S-audit_MX/", icon: "fa-tasks" },
-                    { en: "5S audit CL", cn: "上膠5S稽核", url: "https://dereklin1429.github.io/5S-audit_CL/", icon: "fa-tasks" },
-                    { en: "5S audit EX", cn: "押出5S稽核", url: "https://dereklin1429.github.io/5S-audit-EX/", icon: "fa-tasks" },
-                    { en: "5S audit CT", cn: "裁斷5S稽核", url: "https://dereklin1429.github.io/5S-audit-CT/", icon: "fa-tasks" },
-                    { en: "5S audit WH", cn: "倉庫5S稽核", url: "https://dereklin1429.github.io/5S-audit-WH/", icon: "fa-tasks" }
-                ]
-            },
-            // 第 5 區
-            {
-                title: "保養查核 (Maintenance)",
-                items: [
-                    { en: "MX Maintenance", cn: "混練保養查核", url: "https://dereklin1429.github.io/M-C-maintenance-MX/", icon: "fa-cogs" },
-                    { en: "CT Maintenance", cn: "裁斷保養查核", url: "https://dereklin1429.github.io/Maintenance-CT/", icon: "fa-file-alt" },
-                    { en: "EX Maintenance", cn: "押出保養查核", url: "https://dereklin1429.github.io/M-C_Maintenance-EX/", icon: "fa-clipboard-check" },
-                    { en: "CL Maintenance", cn: "上膠保養查核", url: "https://dereklin1429.github.io/MC-Maintenance-CL/", icon: "fa-list-ol" },
-                    { en: "Container MM Info", cn: "貨櫃管理資訊", url: "https://dereklin1429.github.io/Vehicle-Management/", icon: "fa-truck" }
-                ]
-            },
-            // 第 6 區
-            {
-                title: "一二三級保養紀錄 (Level 123 History)",
-                items: [
-                    { en: "MX 123 History", cn: "混練一二三級保養", url: "https://dereklin1429.github.io/Repair-History-MX/", icon: "fa-tools" }
-                ]
-            },
-            // 第 7 區 (新增)
-            {
-                title: "圖表分析 (Chart Analysis)",
-                items: [
-                    // 因為你還沒給我網址，我先填了一個 #，你可以之後在後台修改
-                    { en: "Car Live Status", cn: "車輛動態管理", url: "https://copy-of-copy-of-intelligent-container-logistics-d-422314829002.us-west1.run.app/", icon: "fa-chart-line" }
-                ]
-            }
-        ];
-
-        let appData = [];
-
-        function loadData() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                try {
-                    appData = JSON.parse(saved);
-                } catch (e) {
-                    console.error("資料解析錯誤，回復預設值");
-                    appData = JSON.parse(JSON.stringify(defaultData));
-                }
-            } else {
-                appData = JSON.parse(JSON.stringify(defaultData));
-                saveData();
-            }
-            renderMain();
-        }
-
-        function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-        }
-
-        function renderMain() {
-            const container = document.getElementById('main-container');
-            container.innerHTML = '';
-
-            appData.forEach((group, groupIndex) => {
-                const groupDiv = document.createElement('div');
-                groupDiv.className = 'group-container';
-                
-                const title = document.createElement('div');
-                title.className = 'group-title';
-                title.textContent = group.title;
-                groupDiv.appendChild(title);
-
-                const grid = document.createElement('div');
-                grid.className = 'button-grid';
-
-                group.items.forEach(btn => {
-                    let nameToDisplay = btn.en;
-                    if (btn.cn && btn.cn.trim() !== '') {
-                        nameToDisplay += `<br>(${btn.cn.trim()})`;
-                    }
-
-                    const link = document.createElement('a');
-                    link.className = `btn-style color-group-${groupIndex}`;
-                    link.href = btn.url;
-                    
-                    if (btn.password && btn.password.trim() !== "") {
-                        link.innerHTML += `<i class="fas fa-lock lock-indicator"></i>`;
-                        link.onclick = function(e) {
-                            e.preventDefault();
-                            const input = prompt("🔒 此頁面受保護，請輸入密碼：");
-                            if (input === btn.password) {
-                                window.open(btn.url, '_blank');
-                            } else {
-                                if(input !== null) alert("❌ 密碼錯誤！");
-                            }
-                        };
-                    } else {
-                        link.target = '_blank';
-                        link.rel = 'noopener noreferrer';
-                    }
-
-                    link.innerHTML += `
-                        <i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i>
-                        <span class="btn-text">${nameToDisplay}</span>
-                    `;
-                    grid.appendChild(link);
-                });
-
-                groupDiv.appendChild(grid);
-                container.appendChild(groupDiv);
-            });
-        }
-
-        function renderSettingsList() {
-            const list = document.getElementById('settings-list');
-            list.innerHTML = '';
-
-            appData.forEach((group, groupIndex) => {
-                const header = document.createElement('div');
-                header.className = `setting-group-header header-style-${groupIndex}`;
-                header.textContent = group.title;
-                list.appendChild(header);
-
-                group.items.forEach((item, itemIndex) => {
-                    const div = document.createElement('div');
-                    div.className = 'setting-item';
-                    
-                    div.innerHTML = `
-                        <label>英文名稱</label>
-                        <input type="text" value="${item.en}" id="input-en-${groupIndex}-${itemIndex}">
-                        <label>中文名稱</label>
-                        <input type="text" value="${item.cn}" id="input-cn-${groupIndex}-${itemIndex}">
-                        <label>網址</label>
-                        <input type="text" value="${item.url}" id="input-url-${groupIndex}-${itemIndex}">
-                        <label>連結密碼 (選填)</label>
-                        <input type="text" value="${item.password || ''}" id="input-pwd-${groupIndex}-${itemIndex}" placeholder="輸入密碼則鎖定連結">
-
-                        <div class="item-actions">
-                            <button class="action-btn save-btn" onclick="saveSingleItem(${groupIndex}, ${itemIndex})">
-                                <i class="fas fa-save"></i> 儲存
-                            </button>
-                            <button class="action-btn delete-btn" onclick="deleteItem(${groupIndex}, ${itemIndex})">
-                                <i class="fas fa-trash-alt"></i> 刪除
-                            </button>
-                        </div>
-                    `;
-                    list.appendChild(div);
-                });
-            });
-        }
-
-        function saveSingleItem(gIndex, iIndex) {
-            const en = document.getElementById(`input-en-${gIndex}-${iIndex}`).value.trim();
-            const cn = document.getElementById(`input-cn-${gIndex}-${iIndex}`).value.trim();
-            const url = document.getElementById(`input-url-${gIndex}-${iIndex}`).value.trim();
-            const pwd = document.getElementById(`input-pwd-${gIndex}-${iIndex}`).value.trim();
-
-            if(!en || !url) {
-                alert("英文名稱與網址不能為空！");
-                return;
-            }
-
-            appData[gIndex].items[iIndex].en = en;
-            appData[gIndex].items[iIndex].cn = cn;
-            appData[gIndex].items[iIndex].url = url;
-            appData[gIndex].items[iIndex].password = pwd;
-
-            saveData();
-            renderMain();
-            alert("已儲存變更！");
-        }
-
-        function deleteItem(gIndex, iIndex) {
-            const target = appData[gIndex].items[iIndex];
-            if(confirm(`確定要刪除 "${target.en}" 嗎？`)) {
-                appData[gIndex].items.splice(iIndex, 1);
-                saveData();
-                renderMain();
-                renderSettingsList();
-            }
-        }
-
-        function addNewButton() {
-            const gIndex = document.getElementById('new-group-select').value;
-            const en = document.getElementById('new-en').value.trim();
-            const cn = document.getElementById('new-cn').value.trim();
-            const url = document.getElementById('new-url').value.trim();
-            const pwd = document.getElementById('new-pwd').value.trim();
-
-            if (!en || !url) {
-                alert('英文名稱和網址連結為必填項。');
-                return;
-            }
-
-            const randomIcons = ["fa-arrow-right", "fa-star", "fa-circle", "fa-check", "fa-bookmark"];
-            const icon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
-
-            appData[gIndex].items.push({ en, cn, url, icon, password: pwd });
-            
-            saveData();
-            renderMain();
-            renderSettingsList();
-            
-            document.getElementById('new-en').value = '';
-            document.getElementById('new-cn').value = '';
-            document.getElementById('new-url').value = '';
-            document.getElementById('new-pwd').value = '';
-            alert("新增成功！");
-        }
-
-        function resetToDefault() {
-            if (confirm("⚠️ 警告：這將刪除所有修改，恢復為預設值。確定嗎？")) {
-                appData = JSON.parse(JSON.stringify(defaultData));
-                saveData();
-                renderMain();
-                renderSettingsList();
-                alert("已恢復預設值。");
-            }
-        }
-
-        const modal = document.getElementById('settingsModal');
-
-        function checkAdminAndOpen() {
-            const input = prompt("🔐 請輸入管理員密碼以進入後台設定：");
-            if (input === ADMIN_PASSWORD) {
-                renderSettingsList();
-                modal.style.display = "block";
-                const content = modal.querySelector('.modal-content');
-                if(content) content.scrollTop = 0;
-            } else {
-                if (input !== null) {
-                    alert("⛔ 密碼錯誤！無法進入後台。");
-                }
-            }
-        }
-
-        function closeModal() {
-            modal.style.display = "none";
-        }
-        
-        window.onclick = function(e) {
-            if(e.target == modal) closeModal();
-        }
-
-        loadData();
-    </script>
+    <script type="text/babel" data-type="module" data-presets="react,typescript" src="./index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
