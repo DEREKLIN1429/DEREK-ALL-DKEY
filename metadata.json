@@ -1,7 +1,0 @@
-{
-  "name": "Mixing Inventory V2",
-  "description": "A robust inventory management system featuring integrated Barcode/QR scanning and OCR text recognition.",
-  "requestFramePermissions": [
-    "camera"
-  ]
-}
