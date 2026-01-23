@@ -161,6 +161,7 @@
         .setting-item { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; flex-direction: column; gap: 8px; }
         .add-form { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
         .add-btn { width: 100%; background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;}
+        input[type="text"], select { width: 100%; padding: 8px; margin-bottom: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -191,10 +192,10 @@
                     <option value="5">第六組 (維修紀錄)</option>
                     <option value="6">第七組 (圖表分析)</option>
                 </select>
-                <input type="text" id="new-en" placeholder="英文名稱 (必填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
-                <input type="text" id="new-cn" placeholder="中文名稱 (選填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
-                <input type="text" id="new-url" placeholder="網址 (https://...)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
-                <input type="text" id="new-pwd" placeholder="個別連結密碼 (選填)" style="width:100%; padding:8px; margin-bottom:8px; box-sizing:border-box;">
+                <input type="text" id="new-en" placeholder="英文名稱 (必填)">
+                <input type="text" id="new-cn" placeholder="中文名稱 (選填)">
+                <input type="text" id="new-url" placeholder="網址 (https://...)">
+                <input type="text" id="new-pwd" placeholder="個別連結密碼 (選填)">
                 <button class="add-btn" onclick="addNewButton()">新增至列表</button>
             </div>
             <div id="settings-list"></div>
@@ -207,8 +208,8 @@
 
     <script>
         const ADMIN_PASSWORD = "88888888"; 
-        // 增加版本號確保抓到最新 defaultData
-        const STORAGE_KEY = 'departmentalAppButtonsV16_Admin';
+        // 更新版本號至 V17 確保抓到最新項目
+        const STORAGE_KEY = 'departmentalAppButtonsV17_Admin';
 
         const defaultData = [
             {
@@ -217,7 +218,6 @@
                     { en: "Lai's Notebook", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-book" },
                     { en: "Repair History", cn: "維修紀錄彙整", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-tools" },
                     { en: "Check Maintenance", cn: "賴 查核保養", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-clipboard-list" },
-                    // 新增的項目
                     { en: "Purchase List", cn: "採購清單彙整", url: "https://dereklin1429.github.io/Procurement-List-03/", icon: "fa-list-check" }
                 ]
             },
@@ -270,7 +270,8 @@
             {
                 title: "圖表分析 (Chart Analysis)",
                 items: [
-                    { en: "Car Live Status", cn: "車輛動態管理", url: "https://dereklin1429.github.io/Intelligent-Container-Logistics-Dashboard-v5/", icon: "fa-chart-line" }
+                    { en: "Car Live Status", cn: "車輛動態管理", url: "https://dereklin1429.github.io/Intelligent-Container-Logistics-Dashboard-v5/", icon: "fa-chart-line" },
+                    { en: "Mixing System", cn: "混練生產系統", url: "https://luharaadil.github.io/Mixing-production-schedule-V2.0/", icon: "fa-industry" }
                 ]
             }
         ];
@@ -303,15 +304,19 @@
                     const link = document.createElement('a');
                     link.className = `btn-style color-group-${gIdx}`;
                     link.href = btn.url;
+                    
+                    let contentHtml = `<i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i><span class="btn-text">${btn.en}<br>(${btn.cn})</span>`;
+                    
                     if (btn.password) {
-                        link.innerHTML = `<i class="fas fa-lock lock-indicator"></i>`;
+                        contentHtml += `<i class="fas fa-lock lock-indicator"></i>`;
                         link.onclick = (e) => {
                             e.preventDefault();
                             if(prompt("請輸入密碼：") === btn.password) window.open(btn.url, '_blank');
                             else alert("密碼錯誤！");
                         };
                     } else { link.target = '_blank'; }
-                    link.innerHTML += `<i class="fas ${btn.icon} btn-icon"></i><span class="btn-text">${btn.en}<br>(${btn.cn})</span>`;
+                    
+                    link.innerHTML = contentHtml;
                     grid.appendChild(link);
                 });
                 groupDiv.appendChild(grid);
@@ -360,17 +365,34 @@
 
         function addNewButton() {
             const g = document.getElementById('new-group-select').value;
-            const en = document.getElementById('new-en').value;
-            const cn = document.getElementById('new-cn').value;
-            const url = document.getElementById('new-url').value;
-            if(en && url) {
-                appData[g].items.push({ en, cn, url, icon: "fa-external-link-alt" });
+            const enInput = document.getElementById('new-en');
+            const cnInput = document.getElementById('new-cn');
+            const urlInput = document.getElementById('new-url');
+            const pwdInput = document.getElementById('new-pwd');
+
+            if(enInput.value && urlInput.value) {
+                appData[g].items.push({ 
+                    en: enInput.value, 
+                    cn: cnInput.value, 
+                    url: urlInput.value, 
+                    password: pwdInput.value || null,
+                    icon: "fa-external-link-alt" 
+                });
                 saveData(); renderMain(); renderSettingsList();
+                
+                // 清空輸入欄位
+                enInput.value = ''; cnInput.value = ''; urlInput.value = ''; pwdInput.value = '';
+                alert("新增成功！");
+            } else {
+                alert("請填寫英文名稱與網址");
             }
         }
 
         function resetToDefault() {
-            if(confirm("確定重置？")) { appData = JSON.parse(JSON.stringify(defaultData)); saveData(); location.reload(); }
+            if(confirm("確定重置？這會清除您所有的自定義修改。")) { 
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload(); 
+            }
         }
 
         function closeModal() { document.getElementById('settingsModal').style.display = "none"; }
@@ -379,4 +401,3 @@
     </script>
 </body>
 </html>
-
