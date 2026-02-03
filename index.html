@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>部門應用程式網站 V1.0 (Departmental Application Index v1.0)</title>
+    <title>部門應用程式網站 V2.0 (Departmental Application Index v2.0)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
@@ -84,7 +84,7 @@
             user-select: none; 
         }
 
-        .btn-style:active { transform: translateY(3px); }
+        .btn-style:active { transform: translateY(3px); box-shadow: none !important; }
 
         .btn-icon { font-size: 28px; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
         
@@ -108,7 +108,7 @@
             color: rgba(255,255,255,0.8);
         }
 
-        /* 顏色定義 */
+        /* 顏色定義 (共 7 種循環) */
         .color-group-0 { background: linear-gradient(to bottom, #FF8C00, #FF7F00); box-shadow: 0 3px 0 #D46900; } 
         .color-group-1 { background: linear-gradient(to bottom, #2196F3, #1976D2); box-shadow: 0 3px 0 #0D47A1; } 
         .color-group-2 { background: linear-gradient(to bottom, #4CAF50, #388E3C); box-shadow: 0 3px 0 #1B5E20; } 
@@ -116,8 +116,6 @@
         .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; } 
         .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; }
         .color-group-6 { background: linear-gradient(to bottom, #E91E63, #C2185B); box-shadow: 0 3px 0 #880E4F; } 
-
-        .btn-style:active { box-shadow: none !important; transform: translateY(3px); }
 
         @media (min-width: 769px) {
             .header-container, .group-container { max-width: 1200px; }
@@ -167,8 +165,8 @@
 <body>
 
     <div class="header-container">
-        <h1>🏢 部門應用程式索引 V1.0</h1>
-        <div class="subheader">Departmental Application Index v1.0</div>
+        <h1>🏢 部門應用程式索引 V2.0</h1>
+        <div class="subheader">Departmental Application Index v2.0</div>
     </div>
 
     <div id="main-container"></div>
@@ -208,8 +206,8 @@
 
     <script>
         const ADMIN_PASSWORD = "88888888"; 
-        // 更新版本號至 V17 確保抓到最新項目
-        const STORAGE_KEY = 'departmentalAppButtonsV17_Admin';
+        // 版本號更新至 V18 確保帶入 AOT 計畫表
+        const STORAGE_KEY = 'departmentalAppButtonsV18_Admin';
 
         const defaultData = [
             {
@@ -218,7 +216,8 @@
                     { en: "Lai's Notebook", cn: "賴桑記事本", url: "https://dereklin1429.github.io/LAI/", icon: "fa-book" },
                     { en: "Repair History", cn: "維修紀錄彙整", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-tools" },
                     { en: "Check Maintenance", cn: "賴 查核保養", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-clipboard-list" },
-                    { en: "Purchase List", cn: "採購清單彙整", url: "https://dereklin1429.github.io/Procurement-List-03/", icon: "fa-list-check" }
+                    { en: "Purchase List", cn: "採購清單彙整", url: "https://dereklin1429.github.io/Procurement-List-03/", icon: "fa-list-check" },
+                    { en: "AOT Schedule", cn: "AOT 計畫表", url: "https://dereklin1429.github.io/derekaotv03/", icon: "fa-calendar-alt" }
                 ]
             },
             {
@@ -302,7 +301,8 @@
                 grid.className = 'button-grid';
                 group.items.forEach(btn => {
                     const link = document.createElement('a');
-                    link.className = `btn-style color-group-${gIdx}`;
+                    // 優化：確保顏色 class 循環使用
+                    link.className = `btn-style color-group-${gIdx % 7}`;
                     link.href = btn.url;
                     
                     let contentHtml = `<i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i><span class="btn-text">${btn.en}<br>(${btn.cn})</span>`;
@@ -328,6 +328,8 @@
             if (prompt("請輸入管理員密碼：") === ADMIN_PASSWORD) {
                 renderSettingsList();
                 document.getElementById('settingsModal').style.display = "block";
+            } else {
+                alert("密碼錯誤");
             }
         }
 
@@ -336,17 +338,19 @@
             list.innerHTML = '';
             appData.forEach((group, gIdx) => {
                 const h = document.createElement('div');
-                h.className = `setting-group-header header-style-${gIdx}`;
+                h.className = `setting-group-header header-style-${gIdx % 7}`;
                 h.textContent = group.title;
                 list.appendChild(h);
                 group.items.forEach((item, iIdx) => {
                     const d = document.createElement('div');
                     d.className = 'setting-item';
-                    d.innerHTML = `<input type="text" value="${item.en}" id="en-${gIdx}-${iIdx}">
-                                   <input type="text" value="${item.cn}" id="cn-${gIdx}-${iIdx}">
-                                   <input type="text" value="${item.url}" id="url-${gIdx}-${iIdx}">
-                                   <button onclick="saveItem(${gIdx},${iIdx})">儲存</button>
-                                   <button onclick="deleteItem(${gIdx},${iIdx})" style="background:#f44336; color:#fff;">刪除</button>`;
+                    d.innerHTML = `<input type="text" value="${item.en}" id="en-${gIdx}-${iIdx}" placeholder="英文">
+                                   <input type="text" value="${item.cn}" id="cn-${gIdx}-${iIdx}" placeholder="中文">
+                                   <input type="text" value="${item.url}" id="url-${gIdx}-${iIdx}" placeholder="網址">
+                                   <div style="display:flex; gap:5px;">
+                                       <button onclick="saveItem(${gIdx},${iIdx})" style="flex:1; background:#2196F3; color:white; border:none; padding:5px; border-radius:4px;">儲存</button>
+                                       <button onclick="deleteItem(${gIdx},${iIdx})" style="flex:1; background:#f44336; color:#fff; border:none; padding:5px; border-radius:4px;">刪除</button>
+                                   </div>`;
                     list.appendChild(d);
                 });
             });
@@ -379,8 +383,6 @@
                     icon: "fa-external-link-alt" 
                 });
                 saveData(); renderMain(); renderSettingsList();
-                
-                // 清空輸入欄位
                 enInput.value = ''; cnInput.value = ''; urlInput.value = ''; pwdInput.value = '';
                 alert("新增成功！");
             } else {
@@ -389,7 +391,7 @@
         }
 
         function resetToDefault() {
-            if(confirm("確定重置？這會清除您所有的自定義修改。")) { 
+            if(confirm("確定重置？這會清除您所有的自定義修改並恢復預設列表。")) { 
                 localStorage.removeItem(STORAGE_KEY);
                 location.reload(); 
             }
@@ -397,11 +399,13 @@
 
         function closeModal() { document.getElementById('settingsModal').style.display = "none"; }
 
+        // 點擊 Modal 外部關閉
+        window.onclick = function(event) {
+            const modal = document.getElementById('settingsModal');
+            if (event.target == modal) closeModal();
+        }
+
         loadData();
     </script>
 </body>
 </html>
-
-
-
-
