@@ -20,6 +20,7 @@
             margin: 0;
             min-height: 100vh;
             box-sizing: border-box;
+            position: relative; /* 讓右上角按鈕可以相對於 body 定位 */
         }
 
         .header-container {
@@ -27,10 +28,33 @@
             margin-bottom: 10px;
             width: 100%;
             max-width: 720px;
+            margin-top: 20px; /* 稍微往下推，避免跟右上角按鈕太近 */
         }
 
         h1 { color: #333; margin: 0; font-size: 24px; text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
         .subheader { color: #444; font-size: 14px; margin-top: 5px; font-weight: bold; }
+
+        /* ---------------------------------- */
+        /* 首頁右上角清除按鈕 */
+        /* ---------------------------------- */
+        #clear-data-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 10;
+            transition: background-color 0.2s;
+        }
+        #clear-data-btn:hover { background-color: #d32f2f; }
+        #clear-data-btn i { margin-right: 5px; }
 
         /* ---------------------------------- */
         /* 2. 分組容器與標題 */
@@ -176,6 +200,10 @@
 </head>
 <body>
 
+    <button id="clear-data-btn" onclick="clearHomeData()">
+        <i class="fas fa-trash-alt"></i> 清除資料
+    </button>
+
     <div class="header-container">
         <h1>🏢 DK 部門應用程式索引 V2.0</h1>
         <div class="subheader">DK Departmental Application Index v2.0</div>
@@ -310,6 +338,14 @@
 
         function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
 
+        // 首頁資料清除按鈕功能
+        function clearHomeData() {
+            if(confirm("確定要清除所有自訂的連結資料，並恢復成預設狀態嗎？")) {
+                localStorage.removeItem(STORAGE_KEY); // 清除快取中的資料
+                location.reload(true); // 強制重新載入頁面
+            }
+        }
+
         function renderMain() {
             const container = document.getElementById('main-container');
             container.innerHTML = '';
@@ -324,7 +360,7 @@
                     link.className = `btn-style color-group-${gIdx % 7}`;
                     link.href = btn.url;
                     
-                    let contentHtml = `<i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i><span class="btn-text">${btn.en}<br>(${btn.cn})</span>`;
+                    let contentHtml = `<i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i><span class="btn-text">${btn.en}<br>(${btn.cn || ''})</span>`;
                     
                     if (btn.password) {
                         contentHtml += `<i class="fas fa-lock lock-indicator"></i>`;
@@ -333,7 +369,9 @@
                             if(prompt("請輸入密碼：") === btn.password) window.open(btn.url, '_blank');
                             else alert("密碼錯誤！");
                         };
-                    } else { link.target = '_blank'; }
+                    } else { 
+                        link.target = '_blank'; 
+                    }
                     
                     link.innerHTML = contentHtml;
                     grid.appendChild(link);
@@ -343,7 +381,6 @@
             });
         }
 
-        // 修改後：不再檢查密碼，直接開啟
         function openSettingsDirectly() {
             renderSettingsList();
             document.getElementById('settingsModal').style.display = "block";
@@ -360,9 +397,11 @@
                 group.items.forEach((item, iIdx) => {
                     const d = document.createElement('div');
                     d.className = 'setting-item';
+                    // 這裡幫你補上了編輯「密碼」的功能
                     d.innerHTML = `<input type="text" value="${item.en}" id="en-${gIdx}-${iIdx}" placeholder="英文">
-                                   <input type="text" value="${item.cn}" id="cn-${gIdx}-${iIdx}" placeholder="中文">
+                                   <input type="text" value="${item.cn || ''}" id="cn-${gIdx}-${iIdx}" placeholder="中文">
                                    <input type="text" value="${item.url}" id="url-${gIdx}-${iIdx}" placeholder="網址">
+                                   <input type="text" value="${item.password || ''}" id="pwd-${gIdx}-${iIdx}" placeholder="密碼 (無密碼請留空)">
                                    <div style="display:flex; gap:5px;">
                                        <button onclick="saveItem(${gIdx},${iIdx})" style="flex:1; background:#2196F3; color:white; border:none; padding:5px; border-radius:4px;">儲存</button>
                                        <button onclick="deleteItem(${gIdx},${iIdx})" style="flex:1; background:#f44336; color:#fff; border:none; padding:5px; border-radius:4px;">刪除</button>
@@ -375,11 +414,18 @@
         function saveItem(g, i) {
             const en = document.getElementById(`en-${g}-${i}`).value.trim();
             const url = document.getElementById(`url-${g}-${i}`).value.trim();
+            const pwd = document.getElementById(`pwd-${g}-${i}`).value.trim();
+            
             if (!en || !url) { alert("名稱與網址必填"); return; }
+            
             appData[g].items[i].en = en;
             appData[g].items[i].cn = document.getElementById(`cn-${g}-${i}`).value.trim();
             appData[g].items[i].url = url;
-            saveData(); renderMain(); alert("已儲存");
+            appData[g].items[i].password = pwd ? pwd : null; // 更新密碼
+            
+            saveData(); 
+            renderMain(); 
+            alert("已儲存：" + en);
         }
 
         function deleteItem(g, i) {
