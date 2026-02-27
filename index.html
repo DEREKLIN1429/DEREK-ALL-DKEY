@@ -160,6 +160,14 @@
         .add-form { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
         .add-btn { width: 100%; background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;}
         input[type="text"], select { width: 100%; padding: 8px; margin-bottom: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        
+        .danger-zone {
+            margin-top: 30px;
+            padding: 15px;
+            border: 2px dashed #f44336;
+            border-radius: 8px;
+            background-color: #fff5f5;
+        }
     </style>
 </head>
 <body>
@@ -196,17 +204,23 @@
                 <input type="text" id="new-pwd" placeholder="個別連結密碼 (選填)">
                 <button class="add-btn" onclick="addNewButton()">新增至列表</button>
             </div>
+            
             <div id="settings-list"></div>
+
+            <div class="danger-zone">
+                <h3 style="color: #d32f2f; margin-top: 0;">⚠️ 危險區域</h3>
+                <button onclick="resetToDefault()" style="width:100%; padding:10px; background:#f44336; color:#fff; border:none; border-radius:4px; font-weight: bold;">重置為預設 (保留版本號)</button>
+                <button onclick="clearAllSystemData()" style="width:100%; padding:10px; background:#333; color:#fff; border:none; border-radius:4px; margin-top:10px; font-weight: bold;">清除所有快取資料 (徹底清空)</button>
+            </div>
+
             <div style="margin-top:20px;">
-                <button onclick="closeModal()" style="width:100%; padding:10px; background:#666; color:#fff; border:none; border-radius:4px;">完成並關閉</button>
-                <button onclick="resetToDefault()" style="width:100%; padding:10px; background:#999; color:#fff; border:none; border-radius:4px; margin-top:10px;">重置為預設</button>
+                <button onclick="closeModal()" style="width:100%; padding:15px; background:#666; color:#fff; border:none; border-radius:4px; font-size: 16px;">完成並關閉</button>
             </div>
         </div>
     </div>
 
     <script>
         const ADMIN_PASSWORD = "88888888"; 
-        // 版本號更新至 V18 確保帶入 AOT 計畫表
         const STORAGE_KEY = 'departmentalAppButtonsV18_Admin';
 
         const defaultData = [
@@ -303,7 +317,6 @@
                 grid.className = 'button-grid';
                 group.items.forEach(btn => {
                     const link = document.createElement('a');
-                    // 優化：確保顏色 class 循環使用
                     link.className = `btn-style color-group-${gIdx % 7}`;
                     link.href = btn.url;
                     
@@ -359,9 +372,13 @@
         }
 
         function saveItem(g, i) {
-            appData[g].items[i].en = document.getElementById(`en-${g}-${i}`).value;
-            appData[g].items[i].cn = document.getElementById(`cn-${g}-${i}`).value;
-            appData[g].items[i].url = document.getElementById(`url-${g}-${i}`).value;
+            const en = document.getElementById(`en-${g}-${i}`).value.trim();
+            const url = document.getElementById(`url-${g}-${i}`).value.trim();
+            if (!en || !url) { alert("名稱與網址必填"); return; }
+            
+            appData[g].items[i].en = en;
+            appData[g].items[i].cn = document.getElementById(`cn-${g}-${i}`).value.trim();
+            appData[g].items[i].url = url;
             saveData(); renderMain(); alert("已儲存");
         }
 
@@ -376,11 +393,11 @@
             const urlInput = document.getElementById('new-url');
             const pwdInput = document.getElementById('new-pwd');
 
-            if(enInput.value && urlInput.value) {
+            if(enInput.value.trim() && urlInput.value.trim()) {
                 appData[g].items.push({ 
-                    en: enInput.value, 
-                    cn: cnInput.value, 
-                    url: urlInput.value, 
+                    en: enInput.value.trim(), 
+                    cn: cnInput.value.trim(), 
+                    url: urlInput.value.trim(), 
                     password: pwdInput.value || null,
                     icon: "fa-external-link-alt" 
                 });
@@ -392,6 +409,7 @@
             }
         }
 
+        // 功能：重置為預設 (僅針對當前 STORAGE_KEY)
         function resetToDefault() {
             if(confirm("確定重置？這會清除您所有的自定義修改並恢復預設列表。")) { 
                 localStorage.removeItem(STORAGE_KEY);
@@ -399,9 +417,17 @@
             }
         }
 
+        // 新功能：一鍵清除瀏覽器中所有 localStorage 資料並強制重新載入
+        function clearAllSystemData() {
+            if(confirm("🚨 警告：這將清除瀏覽器儲存的所有應用程式資料（包含舊版本與所有設定）。\n\n確定執行？")) {
+                localStorage.clear(); // 清除所有 localStorage
+                alert("資料已完全清空，頁面將重新載入。");
+                location.reload(true); // 強制重新載入
+            }
+        }
+
         function closeModal() { document.getElementById('settingsModal').style.display = "none"; }
 
-        // 點擊 Modal 外部關閉
         window.onclick = function(event) {
             const modal = document.getElementById('settingsModal');
             if (event.target == modal) closeModal();
@@ -411,12 +437,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
