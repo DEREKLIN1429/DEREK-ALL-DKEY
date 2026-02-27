@@ -108,7 +108,7 @@
             color: rgba(255,255,255,0.8);
         }
 
-        /* 顏色定義 (共 7 種循環) */
+        /* 顏色定義 */
         .color-group-0 { background: linear-gradient(to bottom, #FF8C00, #FF7F00); box-shadow: 0 3px 0 #D46900; } 
         .color-group-1 { background: linear-gradient(to bottom, #2196F3, #1976D2); box-shadow: 0 3px 0 #0D47A1; } 
         .color-group-2 { background: linear-gradient(to bottom, #4CAF50, #388E3C); box-shadow: 0 3px 0 #1B5E20; } 
@@ -159,6 +159,7 @@
         .setting-item { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; flex-direction: column; gap: 8px; }
         .add-form { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
         .add-btn { width: 100%; background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;}
+        
         input[type="text"], select { width: 100%; padding: 8px; margin-bottom: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
         
         .danger-zone {
@@ -167,6 +168,9 @@
             border: 2px dashed #f44336;
             border-radius: 8px;
             background-color: #fff5f5;
+        }
+        .danger-btn {
+            width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; color: #fff;
         }
     </style>
 </head>
@@ -179,13 +183,14 @@
 
     <div id="main-container"></div>
     
-    <button id="settings-btn" onclick="checkAdminAndOpen()">
+    <button id="settings-btn" onclick="openSettingsDirectly()">
         <i class="fas fa-cog"></i>
     </button>
     
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <h2>⚙️ 管理應用程式 (後台)</h2>
+            
             <div class="add-form">
                 <h3>新增項目</h3>
                 <label>選擇群組</label>
@@ -195,7 +200,7 @@
                     <option value="2">第三組 (庫存盤點)</option>
                     <option value="3">第四組 (5S查核)</option>
                     <option value="4">第五組 (保養查核)</option>
-                    <option value="5">第六組 (維修紀錄)</option>
+                    <option value="5">第六組 (一二三級保養紀錄)</option>
                     <option value="6">第七組 (圖表分析)</option>
                 </select>
                 <input type="text" id="new-en" placeholder="英文名稱 (必填)">
@@ -209,8 +214,8 @@
 
             <div class="danger-zone">
                 <h3 style="color: #d32f2f; margin-top: 0;">⚠️ 危險區域</h3>
-                <button onclick="resetToDefault()" style="width:100%; padding:10px; background:#f44336; color:#fff; border:none; border-radius:4px; font-weight: bold;">重置為預設 (保留版本號)</button>
-                <button onclick="clearAllSystemData()" style="width:100%; padding:10px; background:#333; color:#fff; border:none; border-radius:4px; margin-top:10px; font-weight: bold;">清除所有快取資料 (徹底清空)</button>
+                <button class="danger-btn" style="background-color: #f44336;" onclick="resetToDefault()">重置為預設清單</button>
+                <button class="danger-btn" style="background-color: #333;" onclick="clearAllSystemData()">徹底清空所有快取資料</button>
             </div>
 
             <div style="margin-top:20px;">
@@ -220,7 +225,6 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "88888888"; 
         const STORAGE_KEY = 'departmentalAppButtonsV18_Admin';
 
         const defaultData = [
@@ -251,8 +255,8 @@
                     { en: "Extrusion Inventory", cn: "押出盤點", url: "https://dereklin1429.github.io/derekexInventory02/", icon: "fa-layer-group" },
                     { en: "Calendering Inventory", cn: "上膠盤點", url: "https://dereklin1429.github.io/derekclInventory02/", icon: "fa-scroll" },
                     { en: "CUTTING Inventory", cn: "裁斷盤點", url: "https://dereklin1429.github.io/derekctInventory02/", icon: "fa-cut" },
-                    { en: "RW WH Inventory", cn: "原物料倉庫", url: "https://dereklin1429.github.io/derekrmwnInventory01/", icon: "fa-warehouse" },
-                                    ]
+                    { en: "RW WH Inventory", cn: "原物料倉庫", url: "https://dereklin1429.github.io/derekrmwnInventory01/", icon: "fa-warehouse" }
+                ]
             },
             {
                 title: "5S查核 (5S-audit)",
@@ -339,13 +343,10 @@
             });
         }
 
-        function checkAdminAndOpen() {
-            if (prompt("請輸入管理員密碼：") === ADMIN_PASSWORD) {
-                renderSettingsList();
-                document.getElementById('settingsModal').style.display = "block";
-            } else {
-                alert("密碼錯誤");
-            }
+        // 修改後：不再檢查密碼，直接開啟
+        function openSettingsDirectly() {
+            renderSettingsList();
+            document.getElementById('settingsModal').style.display = "block";
         }
 
         function renderSettingsList() {
@@ -375,7 +376,6 @@
             const en = document.getElementById(`en-${g}-${i}`).value.trim();
             const url = document.getElementById(`url-${g}-${i}`).value.trim();
             if (!en || !url) { alert("名稱與網址必填"); return; }
-            
             appData[g].items[i].en = en;
             appData[g].items[i].cn = document.getElementById(`cn-${g}-${i}`).value.trim();
             appData[g].items[i].url = url;
@@ -409,7 +409,6 @@
             }
         }
 
-        // 功能：重置為預設 (僅針對當前 STORAGE_KEY)
         function resetToDefault() {
             if(confirm("確定重置？這會清除您所有的自定義修改並恢復預設列表。")) { 
                 localStorage.removeItem(STORAGE_KEY);
@@ -417,12 +416,11 @@
             }
         }
 
-        // 新功能：一鍵清除瀏覽器中所有 localStorage 資料並強制重新載入
         function clearAllSystemData() {
-            if(confirm("🚨 警告：這將清除瀏覽器儲存的所有應用程式資料（包含舊版本與所有設定）。\n\n確定執行？")) {
-                localStorage.clear(); // 清除所有 localStorage
-                alert("資料已完全清空，頁面將重新載入。");
-                location.reload(true); // 強制重新載入
+            if(confirm("🚨 警告：這將徹底清除所有設定。\n\n確定執行？")) {
+                localStorage.clear();
+                alert("資料已清空，頁面將重新載入。");
+                location.reload(true);
             }
         }
 
