@@ -137,9 +137,10 @@
         .color-group-2 { background: linear-gradient(to bottom, #4CAF50, #388E3C); box-shadow: 0 3px 0 #1B5E20; } 
         .color-group-3 { background: linear-gradient(to bottom, #9C27B0, #7B1FA2); box-shadow: 0 3px 0 #4A148C; } 
         .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; } 
-        .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; }
+        .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; } 
         .color-group-6 { background: linear-gradient(to bottom, #E91E63, #C2185B); box-shadow: 0 3px 0 #880E4F; } 
-        .color-group-7 { background: linear-gradient(to bottom, #795548, #5D4037); box-shadow: 0 3px 0 #3E2723; }
+        .color-group-7 { background: linear-gradient(to bottom, #795548, #5D4037); box-shadow: 0 3px 0 #3E2723; } 
+        .color-group-8 { background: linear-gradient(to bottom, #607D8B, #455A64); box-shadow: 0 3px 0 #263238; }
 
         @media (min-width: 769px) {
             .header-container, .group-container { max-width: 1200px; }
@@ -180,9 +181,10 @@
         .header-style-2 { background-color: #4CAF50; } 
         .header-style-3 { background-color: #9C27B0; } 
         .header-style-4 { background-color: #F44336; } 
-        .header-style-5 { background-color: #00BCD4; }
-        .header-style-6 { background-color: #E91E63; }
-        .header-style-7 { background-color: #795548; }
+        .header-style-5 { background-color: #00BCD4; } 
+        .header-style-6 { background-color: #E91E63; } 
+        .header-style-7 { background-color: #795548; } 
+        .header-style-8 { background-color: #607D8B; }
 
         .setting-item { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; flex-direction: column; gap: 8px; }
         .add-form { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
@@ -235,6 +237,7 @@
                     <option value="5">第六組 (保養查核)</option>
                     <option value="6">第七組 (一二三級保養紀錄)</option>
                     <option value="7">第八組 (圖表分析)</option>
+                    <option value="8">第九組 (測試事項)</option>
                 </select>
                 <input type="text" id="new-en" placeholder="英文名稱 (必填)">
                 <input type="text" id="new-cn" placeholder="中文名稱 (選填)">
@@ -340,6 +343,17 @@
                     { en: "AOT Schedule", cn: "AOT 計畫表", url: "https://dereklin1429.github.io/project-mon-aot-v.02/", icon: "fa-calendar-alt" },      
                     { en: "PONE QR Code", cn: "QRCode 生成", url: "https://dereklin1429.github.io/derekqrcoed01/", icon: "fa-qrcode" }
                 ]
+            },
+            {
+                title: "測試事項 (Test Items)",
+                items: [
+                    { en: "PMC TB & TR Production & Inventory Stock Tracker", cn: "押出排程庫存追蹤", url: "http://10.90.33.36:5001/", icon: "fa-clipboard-check" },
+                    { en: "PMC Rubber Consumption Calculator", cn: "膠料消耗計算", url: "http://10.90.33.36:5002/", icon: "fa-calculator" },
+                    { en: "Task Tracker", cn: "任務追蹤", url: "http://10.90.33.36:4001/", icon: "fa-tasks" },
+                    { en: "CNC Die data", cn: "CNC 口金數據", url: "http://10.90.33.36:4002/", icon: "fa-cogs" },
+                    { en: "RN & RR Management", cn: "RN/RR 管理", url: "https://luharaadil.github.io/RN-RR-Management/", icon: "fa-layer-group" },
+                    { en: "Rubber PLY CF BW Inventory Manager", cn: "半製品庫存管理", url: "https://luharaadil.github.io/Rubber-PLY-CF-BW-Inventory-Manager/", icon: "fa-boxes" }
+                ]
             }
         ];
 
@@ -376,7 +390,7 @@
                 grid.className = 'button-grid';
                 group.items.forEach(btn => {
                     const link = document.createElement('a');
-                    link.className = `btn-style color-group-${gIdx % 8}`;
+                    link.className = `btn-style color-group-${gIdx % 9}`;
                     link.href = btn.url;
                     
                     let contentHtml = `<i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i><span class="btn-text">${btn.en}<br>(${btn.cn || ''})</span>`;
@@ -410,7 +424,7 @@
             list.innerHTML = '';
             appData.forEach((group, gIdx) => {
                 const h = document.createElement('div');
-                h.className = `setting-group-header header-style-${gIdx % 8}`;
+                h.className = `setting-group-header header-style-${gIdx % 9}`;
                 h.textContent = group.title;
                 list.appendChild(h);
                 group.items.forEach((item, iIdx) => {
