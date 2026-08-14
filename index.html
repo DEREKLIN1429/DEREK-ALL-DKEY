@@ -20,7 +20,7 @@
             margin: 0;
             min-height: 100vh;
             box-sizing: border-box;
-            position: relative; /* 讓右上角按鈕可以相對於 body 定位 */
+            position: relative;
         }
 
         .header-container {
@@ -28,7 +28,7 @@
             margin-bottom: 10px;
             width: 100%;
             max-width: 720px;
-            margin-top: 20px; /* 稍微往下推，避免跟右上角按鈕太近 */
+            margin-top: 20px;
         }
 
         h1 { color: #333; margin: 0; font-size: 24px; text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
@@ -89,7 +89,6 @@
         /* 3. 按鈕樣式 */
         /* ---------------------------------- */
         .btn-style {
-            /* 手機版：一排 3 個 */
             width: calc((100% - 20px) / 3); 
             height: 120px; 
             text-decoration: none; 
@@ -140,6 +139,7 @@
         .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; } 
         .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; }
         .color-group-6 { background: linear-gradient(to bottom, #E91E63, #C2185B); box-shadow: 0 3px 0 #880E4F; } 
+        .color-group-7 { background: linear-gradient(to bottom, #795548, #5D4037); box-shadow: 0 3px 0 #3E2723; }
 
         @media (min-width: 769px) {
             .header-container, .group-container { max-width: 1200px; }
@@ -175,10 +175,14 @@
         }
 
         .setting-group-header { padding: 10px; font-weight: bold; margin-top: 20px; border-radius: 4px; color: white; }
-        .header-style-0 { background-color: #FF8C00; } .header-style-1 { background-color: #2196F3; } 
-        .header-style-2 { background-color: #4CAF50; } .header-style-3 { background-color: #9C27B0; } 
-        .header-style-4 { background-color: #F44336; } .header-style-5 { background-color: #00BCD4; }
+        .header-style-0 { background-color: #FF8C00; } 
+        .header-style-1 { background-color: #2196F3; } 
+        .header-style-2 { background-color: #4CAF50; } 
+        .header-style-3 { background-color: #9C27B0; } 
+        .header-style-4 { background-color: #F44336; } 
+        .header-style-5 { background-color: #00BCD4; }
         .header-style-6 { background-color: #E91E63; }
+        .header-style-7 { background-color: #795548; }
 
         .setting-item { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; flex-direction: column; gap: 8px; }
         .add-form { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
@@ -224,12 +228,13 @@
                 <label>選擇群組</label>
                 <select id="new-group-select">
                     <option value="0">第一組 (紀錄彙整專區)</option>
-                    <option value="1">第二組 (機械故障資訊)</option>
-                    <option value="2">第三組 (庫存盤點)</option>
-                    <option value="3">第四組 (5S查核)</option>
-                    <option value="4">第五組 (保養查核)</option>
-                    <option value="5">第六組 (一二三級保養紀錄)</option>
-                    <option value="6">第七組 (圖表分析)</option>
+                    <option value="1">第二組 (其他資訊)</option>
+                    <option value="2">第三組 (機械故障資訊)</option>
+                    <option value="3">第四組 (庫存盤點)</option>
+                    <option value="4">第五組 (5S查核)</option>
+                    <option value="5">第六組 (保養查核)</option>
+                    <option value="6">第七組 (一二三級保養紀錄)</option>
+                    <option value="7">第八組 (圖表分析)</option>
                 </select>
                 <input type="text" id="new-en" placeholder="英文名稱 (必填)">
                 <input type="text" id="new-cn" placeholder="中文名稱 (選填)">
@@ -264,24 +269,23 @@
                     { en: "Check Maintenance", cn: "賴 查核保養", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-clipboard-list" },
                     { en: "Purchase List", cn: "採購清單彙整", url: "https://dereklin1429.github.io/Procurement-List-03/", icon: "fa-list-check" },
                     { en: "WET TEST", cn: "WET試車紀錄", url: "https://dereklin1429.github.io/MCWETTEST01/", icon: "fa-clipboard-list" },
-                    { en: "SCRAP DATA", cn: "材料報廢紀錄", url: "https://dereklin1429.github.io/Monthly-Scrap-Data-V3.0/", icon: "fa-book" } ,
+                    { en: "SCRAP DATA", cn: "材料報廢紀錄", url: "https://dereklin1429.github.io/Monthly-Scrap-Data-V3.0/", icon: "fa-book" },
                     { en: "RM SPC Information", cn: "材料規格資訊", url: "https://dereklin1429.github.io/Spec-and-raw-material-searcher/", icon: "fa-clipboard-list" },
                     { en: "Daily Scrap Report", cn: "每日報廢資料", url: "https://dereklin1429.github.io/Scrap-everyday-MRI/", icon: "fa-book" },
                     { en: "Semi_Rubber inventory", cn: "半製品膠料庫存", url: "https://dereklin1429.github.io/Inventory-Dashboard/", icon: "fa-list-check" },
-                     { en: "Executive Notes", cn: "主管工作記事", url: "http://10.90.33.35:5000/", icon: "fa-clipboard-check" }
+                    { en: "Executive Notes", cn: "主管工作記事", url: "http://10.90.33.35:5000/", icon: "fa-clipboard-check" }
                 ]
             },
-
- {
+            {
                 title: "其他資訊 (OTHER Info)",
                 items: [
-                    { en: "PMC TB TR  Inventory", cn: "押出排程管制", url: "http://10.90.33.36:5001/", icon: "fa-exclamation-triangle" },
+                    { en: "PMC TB TR Inventory", cn: "押出排程管制", url: "http://10.90.33.36:5001/", icon: "fa-exclamation-triangle" },
                     { en: "PMC Rubber Consumption", cn: "PMC 膠料排程", url: "http://10.90.33.36:5002/", icon: "fa-exclamation-triangle" },
                     { en: "CNC Die data", cn: "CNC 口金管理", url: "http://10.90.33.36:4002/", icon: "fa-exclamation-triangle" },
                     { en: "RN / RR Management", cn: "RN/RR 管理", url: "https://luharaadil.github.io/RN-RR-Management/", icon: "fa-exclamation-triangle" },
-                     { en: "TR/PLY/MX Inventory", cn: "半製品庫存", url: "https://luharaadil.github.io/Rubber-PLY-CF-BW-Inventory-Manager/", icon: "fa-exclamation-triangle" }
+                    { en: "TR/PLY/MX Inventory", cn: "半製品庫存", url: "https://luharaadil.github.io/Rubber-PLY-CF-BW-Inventory-Manager/", icon: "fa-exclamation-triangle" }
                 ]
-            
+            },
             {
                 title: "機械故障資訊 (Machine NG Info)",
                 items: [
@@ -354,11 +358,10 @@
 
         function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
 
-        // 首頁資料清除按鈕功能
         function clearHomeData() {
             if(confirm("確定要清除所有自訂的連結資料，並恢復成預設狀態嗎？")) {
-                localStorage.removeItem(STORAGE_KEY); // 清除快取中的資料
-                location.reload(true); // 強制重新載入頁面
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload(true);
             }
         }
 
@@ -373,7 +376,7 @@
                 grid.className = 'button-grid';
                 group.items.forEach(btn => {
                     const link = document.createElement('a');
-                    link.className = `btn-style color-group-${gIdx % 7}`;
+                    link.className = `btn-style color-group-${gIdx % 8}`;
                     link.href = btn.url;
                     
                     let contentHtml = `<i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i><span class="btn-text">${btn.en}<br>(${btn.cn || ''})</span>`;
@@ -407,13 +410,12 @@
             list.innerHTML = '';
             appData.forEach((group, gIdx) => {
                 const h = document.createElement('div');
-                h.className = `setting-group-header header-style-${gIdx % 7}`;
+                h.className = `setting-group-header header-style-${gIdx % 8}`;
                 h.textContent = group.title;
                 list.appendChild(h);
                 group.items.forEach((item, iIdx) => {
                     const d = document.createElement('div');
                     d.className = 'setting-item';
-                    // 這裡幫你補上了編輯「密碼」的功能
                     d.innerHTML = `<input type="text" value="${item.en}" id="en-${gIdx}-${iIdx}" placeholder="英文">
                                    <input type="text" value="${item.cn || ''}" id="cn-${gIdx}-${iIdx}" placeholder="中文">
                                    <input type="text" value="${item.url}" id="url-${gIdx}-${iIdx}" placeholder="網址">
@@ -437,7 +439,7 @@
             appData[g].items[i].en = en;
             appData[g].items[i].cn = document.getElementById(`cn-${g}-${i}`).value.trim();
             appData[g].items[i].url = url;
-            appData[g].items[i].password = pwd ? pwd : null; // 更新密碼
+            appData[g].items[i].password = pwd ? pwd : null;
             
             saveData(); 
             renderMain(); 
@@ -497,6 +499,3 @@
     </script>
 </body>
 </html>
-
-
-
