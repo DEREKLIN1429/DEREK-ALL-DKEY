@@ -1,553 +1,490 @@
-```
-    .header-container {
-        text-align: center;
-        margin-bottom: 10px;
-        width: 100%;
-        max-width: 720px;
-        margin-top: 20px;
-    }
-
-    h1 { color: #333; margin: 0; font-size: 24px; text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
-    .subheader { color: #444; font-size: 14px; margin-top: 5px; font-weight: bold; }
-
-    #clear-data-btn {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background-color: #f44336;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        z-index: 10;
-        transition: background-color 0.2s;
-    }
-    #clear-data-btn:hover { background-color: #d32f2f; }
-    #clear-data-btn i { margin-right: 5px; }
-
-    .group-container {
-        width: 100%;
-        max-width: 720px;
-        margin-bottom: 20px;
-    }
-
-    .group-title {
-        color: #222;
-        font-size: 18px;
-        font-weight: bold;
-        margin: 15px 5px 10px 5px;
-        padding-left: 10px;
-        border-left: 5px solid #555;
-        background-color: rgba(255,255,255,0.1);
-        padding: 5px 10px;
-        border-radius: 0 4px 4px 0;
-    }
-
-    .button-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: flex-start;
-        padding: 0 5px;
-    }
-
-    .btn-style {
-        width: calc((100% - 20px) / 3);
-        height: 120px;
-        text-decoration: none;
-        color: #fff;
-        border-radius: 12px;
-        cursor: pointer;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 4px;
-        box-sizing: border-box;
-        transition: transform 0.1s;
-        user-select: none;
-    }
-
-    .btn-style:active { transform: translateY(3px); box-shadow: none !important; }
-
-    .btn-icon { font-size: 28px; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>DK 部門應用程式網站 V3.0 (DK Departmental Application Index v3.0)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    .btn-text {
-        font-size: 13px;
-        font-weight: 800;
-        line-height: 1.2;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        word-break: break-word;
-    }
-
-    .lock-indicator {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        font-size: 12px;
-        color: rgba(255,255,255,0.8);
-    }
-
-    .color-group-0 { background: linear-gradient(to bottom, #FF8C00, #FF7F00); box-shadow: 0 3px 0 #D46900; }
-    .color-group-1 { background: linear-gradient(to bottom, #2196F3, #1976D2); box-shadow: 0 3px 0 #0D47A1; }
-    .color-group-2 { background: linear-gradient(to bottom, #4CAF50, #388E3C); box-shadow: 0 3px 0 #1B5E20; }
-    .color-group-3 { background: linear-gradient(to bottom, #9C27B0, #7B1FA2); box-shadow: 0 3px 0 #4A148C; }
-    .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; }
-    .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; }
-    .color-group-6 { background: linear-gradient(to bottom, #E91E63, #C2185B); box-shadow: 0 3px 0 #880E4F; }
-    .color-group-7 { background: linear-gradient(to bottom, #795548, #5D4037); box-shadow: 0 3px 0 #3E2723; }
-    .color-group-8 { background: linear-gradient(to bottom, #607D8B, #455A64); box-shadow: 0 3px 0 #263238; }
-
-    @media (min-width: 769px) {
-        .header-container, .group-container { max-width: 1200px; }
-        .btn-style {
-            width: calc((100% - 40px) / 5);
-            height: 180px;
+    <style>
+        /* ---------------------------------- */
+        /* 1. 基本設定 */
+        /* ---------------------------------- */
+        body {
+            background-color: #A9A9A9; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            padding: 20px 5px;
+            margin: 0;
+            min-height: 100vh;
+            box-sizing: border-box;
+            position: relative; /* 讓右上角按鈕可以相對於 body 定位 */
         }
-        .btn-icon { font-size: 60px; margin-bottom: 15px; }
-        .btn-text { font-size: 18px; }
-    }
 
-    #settings-btn {
-        position: fixed; bottom: 20px; right: 20px;
-        width: 50px; height: 50px; border-radius: 50%;
-        background-color: #333; color: white; border: 2px solid #fff;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.4); z-index: 100;
-        font-size: 24px; cursor: pointer;
-    }
+        .header-container {
+            text-align: center;
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 720px;
+            margin-top: 20px; /* 稍微往下推，避免跟右上角按鈕太近 */
+        }
 
-    .modal {
-        display: none; position: fixed; z-index: 101;
-        left: 0; top: 0; width: 100%; height: 100%;
-        overflow-y: auto; background-color: rgba(0,0,0,0.8);
-    }
+        h1 { color: #333; margin: 0; font-size: 24px; text-shadow: 1px 1px 2px rgba(255,255,255,0.3); }
+        .subheader { color: #444; font-size: 14px; margin-top: 5px; font-weight: bold; }
 
-    .modal-content {
-        background-color: #fefefe; margin: 0 auto; width: 100%;
-        min-height: 100vh; padding: 20px; box-sizing: border-box;
-        max-width: 800px;
-    }
+        /* ---------------------------------- */
+        /* 首頁右上角清除按鈕 */
+        /* ---------------------------------- */
+        #clear-data-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 10;
+            transition: background-color 0.2s;
+        }
+        #clear-data-btn:hover { background-color: #d32f2f; }
+        #clear-data-btn i { margin-right: 5px; }
 
-    .setting-group-header { padding: 10px; font-weight: bold; margin-top: 20px; border-radius: 4px; color: white; }
-    .header-style-0 { background-color: #FF8C00; }
-    .header-style-1 { background-color: #2196F3; }
-    .header-style-2 { background-color: #4CAF50; }
-    .header-style-3 { background-color: #9C27B0; }
-    .header-style-4 { background-color: #F44336; }
-    .header-style-5 { background-color: #00BCD4; }
-    .header-style-6 { background-color: #E91E63; }
-    .header-style-7 { background-color: #795548; }
-    .header-style-8 { background-color: #607D8B; }
+        /* ---------------------------------- */
+        /* 2. 分組容器與標題 */
+        /* ---------------------------------- */
+        .group-container {
+            width: 100%;
+            max-width: 720px;
+            margin-bottom: 20px;
+        }
 
-    .setting-item { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; flex-direction: column; gap: 8px; }
-    .add-form { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
-    .add-btn { width: 100%; background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;}
-    
-    input[type="text"], select { width: 100%; padding: 8px; margin-bottom: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-    
-    .danger-zone {
-        margin-top: 30px;
-        padding: 15px;
-        border: 2px dashed #f44336;
-        border-radius: 8px;
-        background-color: #fff5f5;
-    }
-    .danger-btn {
-        width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; color: #fff;
-    }
-</style>
+        .group-title {
+            color: #222;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px 5px 10px 5px;
+            padding-left: 10px;
+            border-left: 5px solid #555;
+            background-color: rgba(255,255,255,0.1);
+            padding: 5px 10px;
+            border-radius: 0 4px 4px 0;
+        }
 
-```
+        .button-grid {
+            display: flex;
+            flex-wrap: wrap; 
+            gap: 10px;
+            justify-content: flex-start; 
+            padding: 0 5px;
+        }
 
-```
-<button id="clear-data-btn" onclick="clearHomeData()">
-    <i class="fas fa-trash-alt"></i> 清除資料
-</button>
+        /* ---------------------------------- */
+        /* 3. 按鈕樣式 */
+        /* ---------------------------------- */
+        .btn-style {
+            /* 手機版：一排 3 個 */
+            width: calc((100% - 20px) / 3); 
+            height: 120px; 
+            text-decoration: none; 
+            color: #fff; 
+            border-radius: 12px; 
+            cursor: pointer;
+            position: relative; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4px;
+            box-sizing: border-box;
+            transition: transform 0.1s;
+            user-select: none; 
+        }
 
-<div class="header-container">
-    <h1>🏢 DK 部門應用程式索引 V3.0</h1>
-    <div class="subheader">DK Departmental Application Index v3.0</div>
-</div>
+        .btn-style:active { transform: translateY(3px); box-shadow: none !important; }
 
-<div id="main-container"></div>
-
-<button id="settings-btn" onclick="openSettingsDirectly()">
-    <i class="fas fa-cog"></i>
-</button>
-
-<div id="settingsModal" class="modal">
-    <div class="modal-content">
-        <h2>⚙️ 管理應用程式 (後台)</h2>
+        .btn-icon { font-size: 28px; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
         
-        <div class="add-form">
-            <h3>新增項目</h3>
-            <label>選擇群組</label>
-            <select id="new-group-select">
-                <option value="0">第一組 (紀錄彙整專區)</option>
-                <option value="1">第二組 (其他資訊)</option>
-                <option value="2">第三組 (機械故障資訊)</option>
-                <option value="3">第四組 (庫存盤點)</option>
-                <option value="4">第五組 (5S查核)</option>
-                <option value="5">第六組 (保養查核)</option>
-                <option value="6">第七組 (一二三級保養紀錄)</option>
-                <option value="7">第八組 (圖表分析)</option>
-                <option value="8">第九組 (測試事項)</option>
-            </select>
-            <input type="text" id="new-en" placeholder="英文名稱 (必填)">
-            <input type="text" id="new-cn" placeholder="中文名稱 (選填)">
-            <input type="text" id="new-url" placeholder="網址 (https://...)">
-            <input type="text" id="new-pwd" placeholder="個別連結密碼 (選填)">
-            <button class="add-btn" onclick="addNewButton()">新增至列表</button>
-        </div>
+        .btn-text { 
+            font-size: 13px; 
+            font-weight: 800; 
+            line-height: 1.2; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4); 
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+        }
+
+        .lock-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* 顏色定義 */
+        .color-group-0 { background: linear-gradient(to bottom, #FF8C00, #FF7F00); box-shadow: 0 3px 0 #D46900; } 
+        .color-group-1 { background: linear-gradient(to bottom, #2196F3, #1976D2); box-shadow: 0 3px 0 #0D47A1; } 
+        .color-group-2 { background: linear-gradient(to bottom, #4CAF50, #388E3C); box-shadow: 0 3px 0 #1B5E20; } 
+        .color-group-3 { background: linear-gradient(to bottom, #9C27B0, #7B1FA2); box-shadow: 0 3px 0 #4A148C; } 
+        .color-group-4 { background: linear-gradient(to bottom, #F44336, #D32F2F); box-shadow: 0 3px 0 #B71C1C; } 
+        .color-group-5 { background: linear-gradient(to bottom, #00BCD4, #0097A7); box-shadow: 0 3px 0 #006064; }
+        .color-group-6 { background: linear-gradient(to bottom, #E91E63, #C2185B); box-shadow: 0 3px 0 #880E4F; } 
+
+        @media (min-width: 769px) {
+            .header-container, .group-container { max-width: 1200px; }
+            .btn-style {
+                width: calc((100% - 40px) / 5);
+                height: 180px;
+            }
+            .btn-icon { font-size: 60px; margin-bottom: 15px; }
+            .btn-text { font-size: 18px; }
+        }
+
+        /* ---------------------------------- */
+        /* 5. 後台樣式 */
+        /* ---------------------------------- */
+        #settings-btn {
+            position: fixed; bottom: 20px; right: 20px;
+            width: 50px; height: 50px; border-radius: 50%;
+            background-color: #333; color: white; border: 2px solid #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4); z-index: 100;
+            font-size: 24px; cursor: pointer;
+        }
+
+        .modal {
+            display: none; position: fixed; z-index: 101;
+            left: 0; top: 0; width: 100%; height: 100%;
+            overflow-y: auto; background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: #fefefe; margin: 0 auto; width: 100%;
+            min-height: 100vh; padding: 20px; box-sizing: border-box;
+            max-width: 800px;
+        }
+
+        .setting-group-header { padding: 10px; font-weight: bold; margin-top: 20px; border-radius: 4px; color: white; }
+        .header-style-0 { background-color: #FF8C00; } .header-style-1 { background-color: #2196F3; } 
+        .header-style-2 { background-color: #4CAF50; } .header-style-3 { background-color: #9C27B0; } 
+        .header-style-4 { background-color: #F44336; } .header-style-5 { background-color: #00BCD4; }
+        .header-style-6 { background-color: #E91E63; }
+
+        .setting-item { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; display: flex; flex-direction: column; gap: 8px; }
+        .add-form { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
+        .add-btn { width: 100%; background-color: #4CAF50; color: white; padding: 10px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer;}
         
-        <div id="settings-list"></div>
+        input[type="text"], select { width: 100%; padding: 8px; margin-bottom: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        
+        .danger-zone {
+            margin-top: 30px;
+            padding: 15px;
+            border: 2px dashed #f44336;
+            border-radius: 8px;
+            background-color: #fff5f5;
+        }
+        .danger-btn {
+            width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; color: #fff;
+        }
+    </style>
+</head>
+<body>
 
-        <div class="danger-zone">
-            <h3 style="color: #d32f2f; margin-top: 0;">⚠️ 危險區域</h3>
-            <button class="danger-btn" style="background-color: #f44336;" onclick="resetToDefault()">重置為預設清單</button>
-            <button class="danger-btn" style="background-color: #333;" onclick="clearAllSystemData()">徹底清空所有快取資料</button>
-        </div>
+    <button id="clear-data-btn" onclick="clearHomeData()">
+        <i class="fas fa-trash-alt"></i> 清除資料
+    </button>
 
-        <div style="margin-top:20px;">
-            <button onclick="closeModal()" style="width:100%; padding:15px; background:#666; color:#fff; border:none; border-radius:4px; font-size: 16px; cursor: pointer;">完成並關閉</button>
+    <div class="header-container">
+        <h1>🏢 DK 部門應用程式索引 V3.0</h1>
+        <div class="subheader">DK Departmental Application Index v3.0</div>
+    </div>
+
+    <div id="main-container"></div>
+    
+    <button id="settings-btn" onclick="openSettingsDirectly()">
+        <i class="fas fa-cog"></i>
+    </button>
+    
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2>⚙️ 管理應用程式 (後台)</h2>
+            
+            <div class="add-form">
+                <h3>新增項目</h3>
+                <label>選擇群組</label>
+                <select id="new-group-select">
+                    <option value="0">第一組 (紀錄彙整專區)</option>
+                    <option value="1">第二組 (機械故障資訊)</option>
+                    <option value="2">第三組 (庫存盤點)</option>
+                    <option value="3">第四組 (5S查核)</option>
+                    <option value="4">第五組 (保養查核)</option>
+                    <option value="5">第六組 (一二三級保養紀錄)</option>
+                    <option value="6">第七組 (圖表分析)</option>
+                </select>
+                <input type="text" id="new-en" placeholder="英文名稱 (必填)">
+                <input type="text" id="new-cn" placeholder="中文名稱 (選填)">
+                <input type="text" id="new-url" placeholder="網址 (https://...)">
+                <input type="text" id="new-pwd" placeholder="個別連結密碼 (選填)">
+                <button class="add-btn" onclick="addNewButton()">新增至列表</button>
+            </div>
+            
+            <div id="settings-list"></div>
+
+            <div class="danger-zone">
+                <h3 style="color: #d32f2f; margin-top: 0;">⚠️ 危險區域</h3>
+                <button class="danger-btn" style="background-color: #f44336;" onclick="resetToDefault()">重置為預設清單</button>
+                <button class="danger-btn" style="background-color: #333;" onclick="clearAllSystemData()">徹底清空所有快取資料</button>
+            </div>
+
+            <div style="margin-top:20px;">
+                <button onclick="closeModal()" style="width:100%; padding:15px; background:#666; color:#fff; border:none; border-radius:4px; font-size: 16px;">完成並關閉</button>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    const STORAGE_KEY = 'departmentalAppButtonsV18_Admin';
+    <script>
+        const STORAGE_KEY = 'departmentalAppButtonsV18_Admin';
 
-    const defaultData = [
-        {
-            title: "紀錄彙整專區 (Record Compilation Zone)",
-            items: [
-                { en: "PMC Semi_Material Management", cn: "PMC半製品管理", url: "[http://10.90.33.35:5001/](http://10.90.33.35:5001/)", icon: "fa-clipboard-check" },
-                { en: "PMC Rubber Consumption", cn: "PMC 膠料排程", url: "[http://10.90.33.36:5002/](http://10.90.33.36:5002/)", icon: "fa-exclamation-triangle" },
-                { en: "Purchase List", cn: "採購清單彙整", url: "[https://dereklin1429.github.io/Procurement-List-03/](https://dereklin1429.github.io/Procurement-List-03/)", icon: "fa-list-check" },
-                { en: "RM SPC Information", cn: "材料規格資訊", url: "[https://dereklin1429.github.io/Spec-and-raw-material-searcher/](https://dereklin1429.github.io/Spec-and-raw-material-searcher/)", icon: "fa-clipboard-list" },
-                { en: "Semi_Rubber inventory", cn: "半製品膠料庫存", url: "[https://dereklin1429.github.io/Inventory-Dashboard/](https://dereklin1429.github.io/Inventory-Dashboard/)", icon: "fa-list-check" },
-                { en: "CNC Die data", cn: "CNC 口金管理", url: "[http://10.90.33.36:4002/](http://10.90.33.36:4002/)", icon: "fa-exclamation-triangle" },
-                { en: "RN / RR Management", cn: "RN/RR 管理", url: "[https://luharaadil.github.io/RN-RR-Management/](https://luharaadil.github.io/RN-RR-Management/)", icon: "fa-exclamation-triangle" },
-                { en: "M SCRAP DATA", cn: "月材料報廢紀錄", url: "[https://dereklin1429.github.io/Monthly-Scrap-Data-V3.0/](https://dereklin1429.github.io/Monthly-Scrap-Data-V3.0/)", icon: "fa-book" },
-                { en: "Daily Scrap Report", cn: "每日報廢資料", url: "[https://dereklin1429.github.io/Scrap-everyday-MRI/](https://dereklin1429.github.io/Scrap-everyday-MRI/)", icon: "fa-book" }
-            ]
-        },
-        {
-            title: "其他資訊 (OTHER Info)",
-            items: [
-                { en: "PMC TB TR Management", cn: "押出排程管制", url: "[http://10.90.33.36:5001/](http://10.90.33.36:5001/)", icon: "fa-exclamation-triangle" },
-                { en: "TR/PLY/MX Inventory", cn: "半製品庫存", url: "[https://luharaadil.github.io/Rubber-PLY-CF-BW-Inventory-Manager/](https://luharaadil.github.io/Rubber-PLY-CF-BW-Inventory-Manager/)", icon: "fa-exclamation-triangle" }
-            ]
-        },
-        {
-            title: "機械故障資訊 (Machine NG Info)",
-            items: [
-                { en: "Machine NG MX", cn: "混練故障訊息", url: "[https://dereklin1429.github.io/Machine-NG-MX/](https://dereklin1429.github.io/Machine-NG-MX/)", icon: "fa-exclamation-triangle" },
-                { en: "Machine NG CL", cn: "上膠故障訊息", url: "[https://dereklin1429.github.io/Machine-NG-CL/](https://dereklin1429.github.io/Machine-NG-CL/)", icon: "fa-exclamation-triangle" },
-                { en: "Machine NG EX", cn: "押出故障訊息", url: "[https://dereklin1429.github.io/Machine-NG-EX/](https://dereklin1429.github.io/Machine-NG-EX/)", icon: "fa-exclamation-triangle" },
-                { en: "Machine NG CT", cn: "裁斷故障訊息", url: "[https://dereklin1429.github.io/Machine-NG-CT/](https://dereklin1429.github.io/Machine-NG-CT/)", icon: "fa-exclamation-triangle" }
-            ]
-        },
-        {
-            title: "庫存盤點 (Inventory)",
-            items: [
-                { en: "Mixing Inventory", cn: "混練盤點", url: "[https://dereklin1429.github.io/Mixing-Inventory-V3/](https://dereklin1429.github.io/Mixing-Inventory-V3/)", icon: "fa-cubes" },
-                { en: "Extrusion Inventory", cn: "押出盤點", url: "[https://dereklin1429.github.io/derekexInventory02/](https://dereklin1429.github.io/derekexInventory02/)", icon: "fa-layer-group" },
-                { en: "Calendering Inventory", cn: "上膠盤點", url: "[https://dereklin1429.github.io/derekclInventory02/](https://dereklin1429.github.io/derekclInventory02/)", icon: "fa-scroll" },
-                { en: "CUTTING Inventory", cn: "裁斷盤點", url: "[https://dereklin1429.github.io/derekctInventory02/](https://dereklin1429.github.io/derekctInventory02/)", icon: "fa-cut" },
-                { en: "RW WH Inventory", cn: "原物料倉庫", url: "[https://dereklin1429.github.io/derekrmwnInventory01/](https://dereklin1429.github.io/derekrmwnInventory01/)", icon: "fa-warehouse" }
-            ]
-        },
-        {
-            title: "5S查核 (5S-audit)",
-            items: [
-                { en: "5S audit MX", cn: "混練5S稽核", url: "[https://dereklin1429.github.io/5S-audit_MX/](https://dereklin1429.github.io/5S-audit_MX/)", icon: "fa-tasks" },
-                { en: "5S audit CL", cn: "上膠5S稽核", url: "[https://dereklin1429.github.io/5S-audit_CL/](https://dereklin1429.github.io/5S-audit_CL/)", icon: "fa-tasks" },
-                { en: "5S audit EX", cn: "押出5S稽核", url: "[https://dereklin1429.github.io/5S-audit-EX/](https://dereklin1429.github.io/5S-audit-EX/)", icon: "fa-tasks" },
-                { en: "5S audit CT", cn: "裁斷5S稽核", url: "[https://dereklin1429.github.io/5S-audit-CT/](https://dereklin1429.github.io/5S-audit-CT/)", icon: "fa-tasks" },
-                { en: "5S audit WH", cn: "倉庫5S稽核", url: "[https://dereklin1429.github.io/5S-audit-WH/](https://dereklin1429.github.io/5S-audit-WH/)", icon: "fa-tasks" }
-            ]
-        },
-        {
-            title: "保養查核 (Maintenance)",
-            items: [
-                { en: "MX Maintenance", cn: "混練保養查核", url: "[https://dereklin1429.github.io/M-C-maintenance-MX/](https://dereklin1429.github.io/M-C-maintenance-MX/)", icon: "fa-cogs" },
-                { en: "CT Maintenance", cn: "裁斷保養查核", url: "[https://dereklin1429.github.io/Maintenance-CT/](https://dereklin1429.github.io/Maintenance-CT/)", icon: "fa-file-alt" },
-                { en: "EX Maintenance", cn: "押出保養查核", url: "[https://dereklin1429.github.io/M-C_Maintenance-EX/](https://dereklin1429.github.io/M-C_Maintenance-EX/)", icon: "fa-clipboard-check" },
-                { en: "CL Maintenance", cn: "上膠保養查核", url: "[https://dereklin1429.github.io/MC-Maintenance-CL/](https://dereklin1429.github.io/MC-Maintenance-CL/)", icon: "fa-list-ol" },
-                { en: "Container MM Info", cn: "貨櫃管理資訊", url: "[https://dereklin1429.github.io/Vehicle-Management/](https://dereklin1429.github.io/Vehicle-Management/)", icon: "fa-truck" },
-                { en: "RM Management", cn: "原管庫存管理", url: "[https://dereklin1429.github.io/Warehouse-Inventory-System-V6.0/](https://dereklin1429.github.io/Warehouse-Inventory-System-V6.0/)", icon: "fa-warehouse" }
-            ]
-        },
-        {
-            title: "一二三級保養紀錄 (Level 123 History)",
-            items: [
-                { en: "MX 123 History", cn: "混練一二三級保養", url: "[https://dereklin1429.github.io/Repair-History-MX/](https://dereklin1429.github.io/Repair-History-MX/)", icon: "fa-tools" }
-            ]
-        },
-        {
-            title: "圖表分析 (Chart Analysis)",
-            items: [
-                { en: "Car Live Status", cn: "車輛動態管理", url: "[https://dereklin1429.github.io/Intelligent-Container-Logistics-Dashboard-v6/](https://dereklin1429.github.io/Intelligent-Container-Logistics-Dashboard-v6/)", icon: "fa-chart-line" },
-                { en: "Mixing System", cn: "混練生產系統", url: "[https://dereklin1429.github.io/MAXXIS-Production-Dashboard-V2.0/](https://dereklin1429.github.io/MAXXIS-Production-Dashboard-V2.0/)", icon: "fa-industry" },
-                { en: "AOT Schedule", cn: "AOT 計畫表", url: "[https://dereklin1429.github.io/project-mon-aot-v.02/](https://dereklin1429.github.io/project-mon-aot-v.02/)", icon: "fa-calendar-alt" },
-                { en: "PONE QR Code", cn: "QRCode 生成", url: "[https://dereklin1429.github.io/derekqrcoed01/](https://dereklin1429.github.io/derekqrcoed01/)", icon: "fa-qrcode" }
-            ]
-        },
-        {
-            title: "測試事項 (Test Items)",
-            items: [
-                { en: "PMC/TB/TR Inventory Stock Tracker", cn: "押出排程庫存追蹤", url: "[http://10.90.33.36:5001/](http://10.90.33.36:5001/)", icon: "fa-clipboard-check" },
-                { en: "CNC Die data", cn: "CNC 口金數據", url: "[http://10.90.33.36:4002/](http://10.90.33.36:4002/)", icon: "fa-cogs" },
-                { en: "RN/RR Management", cn: "RN/RR 管理", url: "[https://luharaadil.github.io/RN-RR-Management/](https://luharaadil.github.io/RN-RR-Management/)", icon: "fa-layer-group" },
-                { en: "Rubber PLY CF BW Inventory Manager", cn: "半製品庫存管理", url: "[https://luharaadil.github.io/Rubber-PLY-CF-BW-Inventory-Manager/](https://luharaadil.github.io/Rubber-PLY-CF-BW-Inventory-Manager/)", icon: "fa-boxes" },
-                { en: "PMC Rubber Consumption Calculator", cn: "膠料消耗計算", url: "[http://10.90.33.36:5002/](http://10.90.33.36:5002/)", icon: "fa-calculator" },
-                { en: "Task Tracker", cn: "任務追蹤", url: "[http://10.90.33.36:4001/](http://10.90.33.36:4001/)", icon: "fa-tasks" },
-                { en: "Repair History", cn: "維修紀錄彙整", url: "[https://dereklin1429.github.io/repair-history/](https://dereklin1429.github.io/repair-history/)", icon: "fa-tools" },
-                { en: "WET TEST", cn: "WET試車紀錄", url: "[https://dereklin1429.github.io/MCWETTEST01/](https://dereklin1429.github.io/MCWETTEST01/)", icon: "fa-clipboard-list" },
-                { en: "Executive Notes", cn: "主管工作記事", url: "[http://10.90.33.35:5000/](http://10.90.33.35:5000/)", icon: "fa-clipboard-check" }
-            ]
-        }
-    ];
+        const defaultData = [
+            {
+                title: "紀錄彙整專區 (Record Compilation Zone)",
+                items: [
+                    { en: "BD Semi_Material Inventory", cn: "半製品庫存", url: "http://10.90.33.35:5001/", icon: "fa-clipboard-check" },
+                    { en: "Repair History", cn: "維修紀錄彙整", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-tools" },
+                    { en: "Check Maintenance", cn: "賴 查核保養", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-clipboard-list" },
+                    { en: "Purchase List", cn: "採購清單彙整", url: "https://dereklin1429.github.io/Procurement-List-03/", icon: "fa-list-check" },
+                    { en: "WET TEST", cn: "WET試車紀錄", url: "https://dereklin1429.github.io/MCWETTEST01/", icon: "fa-clipboard-list" },
+                    { en: "SCRAP DATA", cn: "材料報廢紀錄", url: "https://dereklin1429.github.io/Monthly-Scrap-Data-V3.0/", icon: "fa-book" } ,
+                    { en: "RM SPC Information", cn: "材料規格資訊", url: "https://dereklin1429.github.io/Spec-and-raw-material-searcher/", icon: "fa-clipboard-list" },
+                    { en: "Daily Scrap Report", cn: "每日報廢資料", url: "https://dereklin1429.github.io/Scrap-everyday-MRI/", icon: "fa-book" },
+                    { en: "Semi_Rubber inventory", cn: "半製品膠料庫存", url: "https://dereklin1429.github.io/Inventory-Dashboard/", icon: "fa-list-check" },
+                     { en: "Executive Notes", cn: "主管工作記事", url: "http://10.90.33.35:5000/", icon: "fa-clipboard-check" }
+                ]
+            },
+            {
+                title: "機械故障資訊 (Machine NG Info)",
+                items: [
+                    { en: "Machine NG MX", cn: "混練故障訊息", url: "https://dereklin1429.github.io/Machine-NG-MX/", icon: "fa-exclamation-triangle" },
+                    { en: "Machine NG CL", cn: "上膠故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CL/", icon: "fa-exclamation-triangle" },
+                    { en: "Machine NG EX", cn: "押出故障訊息", url: "https://dereklin1429.github.io/Machine-NG-EX/", icon: "fa-exclamation-triangle" },
+                    { en: "Machine NG CT", cn: "裁斷故障訊息", url: "https://dereklin1429.github.io/Machine-NG-CT/", icon: "fa-exclamation-triangle" }
+                ]
+            },
+            {
+                title: "庫存盤點 (Inventory)",
+                items: [
+                    { en: "Mixing Inventory", cn: "混練盤點", url: "https://dereklin1429.github.io/Mixing-Inventory-V3/", icon: "fa-cubes" },
+                    { en: "Extrusion Inventory", cn: "押出盤點", url: "https://dereklin1429.github.io/derekexInventory02/", icon: "fa-layer-group" },
+                    { en: "Calendering Inventory", cn: "上膠盤點", url: "https://dereklin1429.github.io/derekclInventory02/", icon: "fa-scroll" },
+                    { en: "CUTTING Inventory", cn: "裁斷盤點", url: "https://dereklin1429.github.io/derekctInventory02/", icon: "fa-cut" },
+                    { en: "RW WH Inventory", cn: "原物料倉庫", url: "https://dereklin1429.github.io/derekrmwnInventory01/", icon: "fa-warehouse" }
+                ]
+            },
+            {
+                title: "5S查核 (5S-audit)",
+                items: [
+                    { en: "5S audit MX", cn: "混練5S稽核", url: "https://dereklin1429.github.io/5S-audit_MX/", icon: "fa-tasks" },
+                    { en: "5S audit CL", cn: "上膠5S稽核", url: "https://dereklin1429.github.io/5S-audit_CL/", icon: "fa-tasks" },
+                    { en: "5S audit EX", cn: "押出5S稽核", url: "https://dereklin1429.github.io/5S-audit-EX/", icon: "fa-tasks" },
+                    { en: "5S audit CT", cn: "裁斷5S稽核", url: "https://dereklin1429.github.io/5S-audit-CT/", icon: "fa-tasks" },
+                    { en: "5S audit WH", cn: "倉庫5S稽核", url: "https://dereklin1429.github.io/5S-audit-WH/", icon: "fa-tasks" }
+                ]
+            },
+            {
+                title: "保養查核 (Maintenance)",
+                items: [
+                    { en: "MX Maintenance", cn: "混練保養查核", url: "https://dereklin1429.github.io/M-C-maintenance-MX/", icon: "fa-cogs" },
+                    { en: "CT Maintenance", cn: "裁斷保養查核", url: "https://dereklin1429.github.io/Maintenance-CT/", icon: "fa-file-alt" },
+                    { en: "EX Maintenance", cn: "押出保養查核", url: "https://dereklin1429.github.io/M-C_Maintenance-EX/", icon: "fa-clipboard-check" },
+                    { en: "CL Maintenance", cn: "上膠保養查核", url: "https://dereklin1429.github.io/MC-Maintenance-CL/", icon: "fa-list-ol" },
+                    { en: "Container MM Info", cn: "貨櫃管理資訊", url: "https://dereklin1429.github.io/Vehicle-Management/", icon: "fa-truck" },
+                    { en: "RM Management", cn: "原管庫存管理", url: "https://dereklin1429.github.io/Warehouse-Inventory-System-V6.0/", icon: "fa-warehouse" }
+                ]
+            },
+            {
+                title: "一二三級保養紀錄 (Level 123 History)",
+                items: [
+                    { en: "MX 123 History", cn: "混練一二三級保養", url: "https://dereklin1429.github.io/Repair-History-MX/", icon: "fa-tools" }
+                ]
+            },
+            {
+                title: "圖表分析 (Chart Analysis)",
+                items: [
+                    { en: "Car Live Status", cn: "車輛動態管理", url: "https://dereklin1429.github.io/Intelligent-Container-Logistics-Dashboard-v6/", icon: "fa-chart-line" },
+                    { en: "Mixing System", cn: "混練生產系統", url: "https://dereklin1429.github.io/MAXXIS-Production-Dashboard-V2.0/", icon: "fa-industry" },
+                    { en: "AOT Schedule", cn: "AOT 計畫表", url: "https://dereklin1429.github.io/project-mon-aot-v.02/", icon: "fa-calendar-alt" },      
+                    { en: "PONE QR Code", cn: "QRCode 生成", url: "https://dereklin1429.github.io/derekqrcoed01/", icon: "fa-qrcode" }
+                ]
+            }
+        ];
 
-    let appData = [];
+        let appData = [];
 
-    function loadData() {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            try {
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
                 appData = JSON.parse(saved);
-            } catch (e) {
+            } else {
                 appData = JSON.parse(JSON.stringify(defaultData));
                 saveData();
             }
-        } else {
-            appData = JSON.parse(JSON.stringify(defaultData));
-            saveData();
-        }
-        renderMain();
-    }
-
-    function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
-
-    function clearHomeData() {
-        if (confirm("確定要清除所有自訂的連結資料，並恢復成預設狀態嗎？")) {
-            localStorage.removeItem(STORAGE_KEY);
-            location.reload();
-        }
-    }
-
-    function renderMain() {
-        const container = document.getElementById('main-container');
-        container.innerHTML = '';
-        appData.forEach((group, gIdx) => {
-            const groupDiv = document.createElement('div');
-            groupDiv.className = 'group-container';
-            
-            const titleDiv = document.createElement('div');
-            titleDiv.className = 'group-title';
-            titleDiv.textContent = group.title;
-            groupDiv.appendChild(titleDiv);
-            
-            const grid = document.createElement('div');
-            grid.className = 'button-grid';
-            group.items.forEach(btn => {
-                const link = document.createElement('a');
-                link.className = `btn-style color-group-${gIdx % 9}`;
-                link.href = btn.url;
-                
-                let contentHtml = `<i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i><span class="btn-text">${escapeHtml(btn.en)}<br>(${escapeHtml(btn.cn || '')})</span>`;
-                
-                if (btn.password) {
-                    contentHtml += `<i class="fas fa-lock lock-indicator"></i>`;
-                    link.onclick = (e) => {
-                        e.preventDefault();
-                        const input = prompt("請輸入密碼：");
-                        if (input === null) return;
-                        if (input === btn.password) {
-                            window.open(btn.url, '_blank');
-                        } else {
-                            alert("密碼錯誤！");
-                        }
-                    };
-                } else {
-                    link.target = '_blank';
-                }
-                
-                link.innerHTML = contentHtml;
-                grid.appendChild(link);
-            });
-            groupDiv.appendChild(grid);
-            container.appendChild(groupDiv);
-        });
-    }
-
-    function openSettingsDirectly() {
-        renderSettingsList();
-        document.getElementById('settingsModal').style.display = "block";
-    }
-
-    function renderSettingsList() {
-        const list = document.getElementById('settings-list');
-        list.innerHTML = '';
-        appData.forEach((group, gIdx) => {
-            const h = document.createElement('div');
-            h.className = `setting-group-header header-style-${gIdx % 9}`;
-            h.textContent = group.title;
-            list.appendChild(h);
-            group.items.forEach((item, iIdx) => {
-                const d = document.createElement('div');
-                d.className = 'setting-item';
-
-                const inEn = document.createElement('input');
-                inEn.type = 'text';
-                inEn.value = item.en || '';
-                inEn.id = `en-${gIdx}-${iIdx}`;
-                inEn.placeholder = '英文';
-
-                const inCn = document.createElement('input');
-                inCn.type = 'text';
-                inCn.value = item.cn || '';
-                inCn.id = `cn-${gIdx}-${iIdx}`;
-                inCn.placeholder = '中文';
-
-                const inUrl = document.createElement('input');
-                inUrl.type = 'text';
-                inUrl.value = item.url || '';
-                inUrl.id = `url-${gIdx}-${iIdx}`;
-                inUrl.placeholder = '網址';
-
-                const inPwd = document.createElement('input');
-                inPwd.type = 'text';
-                inPwd.value = item.password || '';
-                inPwd.id = `pwd-${gIdx}-${iIdx}`;
-                inPwd.placeholder = '密碼 (無密碼請留空)';
-
-                const btnBox = document.createElement('div');
-                btnBox.style.display = 'flex';
-                btnBox.style.gap = '5px';
-
-                const btnSave = document.createElement('button');
-                btnSave.textContent = '儲存';
-                btnSave.style.cssText = 'flex:1; background:#2196F3; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer;';
-                btnSave.onclick = () => saveItem(gIdx, iIdx);
-
-                const btnDel = document.createElement('button');
-                btnDel.textContent = '刪除';
-                btnDel.style.cssText = 'flex:1; background:#f44336; color:#fff; border:none; padding:5px; border-radius:4px; cursor:pointer;';
-                btnDel.onclick = () => deleteItem(gIdx, iIdx);
-
-                btnBox.appendChild(btnSave);
-                btnBox.appendChild(btnDel);
-
-                d.appendChild(inEn);
-                d.appendChild(inCn);
-                d.appendChild(inUrl);
-                d.appendChild(inPwd);
-                d.appendChild(btnBox);
-
-                list.appendChild(d);
-            });
-        });
-    }
-
-    function saveItem(g, i) {
-        const en = document.getElementById(`en-${g}-${i}`).value.trim();
-        const url = document.getElementById(`url-${g}-${i}`).value.trim();
-        const pwd = document.getElementById(`pwd-${g}-${i}`).value.trim();
-        
-        if (!en || !url) { alert("名稱與網址必填"); return; }
-        
-        appData[g].items[i].en = en;
-        appData[g].items[i].cn = document.getElementById(`cn-${g}-${i}`).value.trim();
-        appData[g].items[i].url = url;
-        appData[g].items[i].password = pwd ? pwd : null;
-        
-        saveData();
-        renderMain();
-        alert("已儲存：" + en);
-    }
-
-    function deleteItem(g, i) {
-        if (confirm("確定刪除？")) {
-            appData[g].items.splice(i, 1);
-            saveData();
             renderMain();
-            renderSettingsList();
         }
-    }
 
-    function addNewButton() {
-        const g = document.getElementById('new-group-select').value;
-        const enInput = document.getElementById('new-en');
-        const cnInput = document.getElementById('new-cn');
-        const urlInput = document.getElementById('new-url');
-        const pwdInput = document.getElementById('new-pwd');
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
 
-        if (enInput.value.trim() && urlInput.value.trim()) {
-            appData[g].items.push({
-                en: enInput.value.trim(),
-                cn: cnInput.value.trim(),
-                url: urlInput.value.trim(),
-                password: pwdInput.value.trim() || null,
-                icon: "fa-external-link-alt"
+        // 首頁資料清除按鈕功能
+        function clearHomeData() {
+            if(confirm("確定要清除所有自訂的連結資料，並恢復成預設狀態嗎？")) {
+                localStorage.removeItem(STORAGE_KEY); // 清除快取中的資料
+                location.reload(true); // 強制重新載入頁面
+            }
+        }
+
+        function renderMain() {
+            const container = document.getElementById('main-container');
+            container.innerHTML = '';
+            appData.forEach((group, gIdx) => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'group-container';
+                groupDiv.innerHTML = `<div class="group-title">${group.title}</div>`;
+                const grid = document.createElement('div');
+                grid.className = 'button-grid';
+                group.items.forEach(btn => {
+                    const link = document.createElement('a');
+                    link.className = `btn-style color-group-${gIdx % 7}`;
+                    link.href = btn.url;
+                    
+                    let contentHtml = `<i class="fas ${btn.icon || 'fa-external-link-alt'} btn-icon"></i><span class="btn-text">${btn.en}<br>(${btn.cn || ''})</span>`;
+                    
+                    if (btn.password) {
+                        contentHtml += `<i class="fas fa-lock lock-indicator"></i>`;
+                        link.onclick = (e) => {
+                            e.preventDefault();
+                            if(prompt("請輸入密碼：") === btn.password) window.open(btn.url, '_blank');
+                            else alert("密碼錯誤！");
+                        };
+                    } else { 
+                        link.target = '_blank'; 
+                    }
+                    
+                    link.innerHTML = contentHtml;
+                    grid.appendChild(link);
+                });
+                groupDiv.appendChild(grid);
+                container.appendChild(groupDiv);
             });
-            saveData();
-            renderMain();
+        }
+
+        function openSettingsDirectly() {
             renderSettingsList();
-            enInput.value = '';
-            cnInput.value = '';
-            urlInput.value = '';
-            pwdInput.value = '';
-            alert("新增成功！");
-        } else {
-            alert("請填寫英文名稱與網址");
+            document.getElementById('settingsModal').style.display = "block";
         }
-    }
 
-    function resetToDefault() {
-        if (confirm("確定重置？這會清除您所有的自定義修改並恢復預設列表。")) {
-            localStorage.removeItem(STORAGE_KEY);
-            location.reload();
+        function renderSettingsList() {
+            const list = document.getElementById('settings-list');
+            list.innerHTML = '';
+            appData.forEach((group, gIdx) => {
+                const h = document.createElement('div');
+                h.className = `setting-group-header header-style-${gIdx % 7}`;
+                h.textContent = group.title;
+                list.appendChild(h);
+                group.items.forEach((item, iIdx) => {
+                    const d = document.createElement('div');
+                    d.className = 'setting-item';
+                    // 這裡幫你補上了編輯「密碼」的功能
+                    d.innerHTML = `<input type="text" value="${item.en}" id="en-${gIdx}-${iIdx}" placeholder="英文">
+                                   <input type="text" value="${item.cn || ''}" id="cn-${gIdx}-${iIdx}" placeholder="中文">
+                                   <input type="text" value="${item.url}" id="url-${gIdx}-${iIdx}" placeholder="網址">
+                                   <input type="text" value="${item.password || ''}" id="pwd-${gIdx}-${iIdx}" placeholder="密碼 (無密碼請留空)">
+                                   <div style="display:flex; gap:5px;">
+                                       <button onclick="saveItem(${gIdx},${iIdx})" style="flex:1; background:#2196F3; color:white; border:none; padding:5px; border-radius:4px;">儲存</button>
+                                       <button onclick="deleteItem(${gIdx},${iIdx})" style="flex:1; background:#f44336; color:#fff; border:none; padding:5px; border-radius:4px;">刪除</button>
+                                   </div>`;
+                    list.appendChild(d);
+                });
+            });
         }
-    }
 
-    function clearAllSystemData() {
-        if (confirm("🚨 警告：這將徹底清除所有設定。\n\n確定執行？")) {
-            localStorage.clear();
-            alert("資料已清空，頁面將重新載入。");
-            location.reload();
+        function saveItem(g, i) {
+            const en = document.getElementById(`en-${g}-${i}`).value.trim();
+            const url = document.getElementById(`url-${g}-${i}`).value.trim();
+            const pwd = document.getElementById(`pwd-${g}-${i}`).value.trim();
+            
+            if (!en || !url) { alert("名稱與網址必填"); return; }
+            
+            appData[g].items[i].en = en;
+            appData[g].items[i].cn = document.getElementById(`cn-${g}-${i}`).value.trim();
+            appData[g].items[i].url = url;
+            appData[g].items[i].password = pwd ? pwd : null; // 更新密碼
+            
+            saveData(); 
+            renderMain(); 
+            alert("已儲存：" + en);
         }
-    }
 
-    function closeModal() { document.getElementById('settingsModal').style.display = "none"; }
+        function deleteItem(g, i) {
+            if(confirm("確定刪除？")) { appData[g].items.splice(i, 1); saveData(); renderMain(); renderSettingsList(); }
+        }
 
-    function escapeHtml(str) {
-        if (!str) return '';
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
+        function addNewButton() {
+            const g = document.getElementById('new-group-select').value;
+            const enInput = document.getElementById('new-en');
+            const cnInput = document.getElementById('new-cn');
+            const urlInput = document.getElementById('new-url');
+            const pwdInput = document.getElementById('new-pwd');
 
-    window.onclick = function(event) {
-        const modal = document.getElementById('settingsModal');
-        if (event.target === modal) closeModal();
-    }
+            if(enInput.value.trim() && urlInput.value.trim()) {
+                appData[g].items.push({ 
+                    en: enInput.value.trim(), 
+                    cn: cnInput.value.trim(), 
+                    url: urlInput.value.trim(), 
+                    password: pwdInput.value || null,
+                    icon: "fa-external-link-alt" 
+                });
+                saveData(); renderMain(); renderSettingsList();
+                enInput.value = ''; cnInput.value = ''; urlInput.value = ''; pwdInput.value = '';
+                alert("新增成功！");
+            } else {
+                alert("請填寫英文名稱與網址");
+            }
+        }
 
-    loadData();
-</script>
+        function resetToDefault() {
+            if(confirm("確定重置？這會清除您所有的自定義修改並恢復預設列表。")) { 
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload(); 
+            }
+        }
 
-```
+        function clearAllSystemData() {
+            if(confirm("🚨 警告：這將徹底清除所有設定。\n\n確定執行？")) {
+                localStorage.clear();
+                alert("資料已清空，頁面將重新載入。");
+                location.reload(true);
+            }
+        }
+
+        function closeModal() { document.getElementById('settingsModal').style.display = "none"; }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('settingsModal');
+            if (event.target == modal) closeModal();
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
+
+
